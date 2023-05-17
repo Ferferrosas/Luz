@@ -38,7 +38,7 @@ void setup() {
     while (1);
   }
   TCA9548A(6);
-  if (!bmp180_sensor2.begin()) {
+  if (!bmp180_sensor3.begin()) {
     Serial.println("Could not find a valid MAX30102 sensor on bus 4, check wiring!");
     while (1);
   }
@@ -50,9 +50,9 @@ void loop() {
   Serial.print("-->");
   DataRead(bmp180_sensor1, 4);
   Serial.print(" ");
-  DataRead(bmp180_sensor1, 5);
+  DataRead(bmp180_sensor2, 5);
   Serial.print(" ");
-  DataRead(bmp180_sensor2, 6);
+  DataRead(bmp180_sensor3, 6);
   Serial.println();
   delay(1);
 }

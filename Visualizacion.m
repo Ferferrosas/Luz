@@ -177,20 +177,20 @@ disp("Mano abierta , Puño , Flexión muñeca , Extensión muñeca");
 %% Segmentar movimientos
 
 Ir=[]; R=[]; Emg=[];Ir2=[]; R2=[]; Emg2=[];
-    for m=1:1:4 %movimientos
-        for rep=1:1:10 %repetición
-            Ir=[Ir;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,1)'];
-            R=[R;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,2)'];
-            Emg=[Emg;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,3)'];
-            Ir2=[Ir2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,4)'];
-            R2=[R2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,5)'];
-            Emg2=[Emg2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,6)'];
-        end
+for m=1:1:4 %movimientos
+    for rep=1:1:10 %repetición
+        Ir=[Ir;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,1)'];
+        R=[R;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,2)'];
+        Emg=[Emg;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,3)'];
+        Ir2=[Ir2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,4)'];
+        R2=[R2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,5)'];
+        Emg2=[Emg2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,6)'];
     end
+end
 
 for m=1:1:40
-    [env_Emg(m,:),] = envelope(Emg(m,:),800);
-    [env_Emg2(m,:),] = envelope(Emg2(m,:),800);
+    [env_Emg(m,:),] = envelope(abs(Emg(m,:)),190);
+    [env_Emg2(m,:),] = envelope(abs(Emg2(m,:)),190);
 end
 
 %% Promedios y Std
@@ -244,7 +244,7 @@ for mov=1:1:4
     title(Nombres_canales(3))
     xlabel("Tiempo (seg)")
     hold on
-    legend("Mano abierta" , "Puño" , "Flexión muñeca" , "Extensión muñeca");
+    %    legend("Mano abierta" , "Puño" , "Flexión muñeca" , "Extensión muñeca");
     sgtitle(" Promedios de movimientos Sensor 1" )
 end
 
@@ -271,7 +271,7 @@ for mov=1:1:4
     title(Nombres_canales(6))
     xlabel("Tiempo (seg)")
     hold on
-    legend("Mano abierta" , "Puño" , "Flexión muñeca" , "Extensión muñeca");
+    %legend("Mano abierta" , "Puño" , "Flexión muñeca" , "Extensión muñeca");
     sgtitle(" Promedios de movimientos Sensor 1" )
 end
 
@@ -413,7 +413,7 @@ for mov=1:1:4
     xlabel("Tiempo (seg)")
     
     sgtitle("Promedios + std sensor 1")
-     n=n+1;
+    n=n+1;
 end
 
 figure()
@@ -529,7 +529,7 @@ for mov=1:1:4
     xlabel("Tiempo (seg)")
     
     sgtitle("Promedios + std sensor 1")
-     n=n+1;
+    n=n+1;
 end
 
 figure()
@@ -615,7 +615,7 @@ end
 
 %Matriz de 40x223, que representa los 4 movimientos repetidos 10 veces, las
 %37 caracteristicas de cada canal, 37*6=222 + 1 fila que define el
-%movmiento 
+%movmiento
 
 m=1;
 guia=[];
@@ -627,7 +627,6 @@ for im = 1:4
 end
 
 %close all
-
 
 %% Sacar caracteristicas en un excel
 
@@ -655,6 +654,31 @@ for n = 1:10:40
     cnt = cnt+1;
 end
 legend
+
+%% Ranking de las caracteriticas
+%vector con el nombre de las caracteristicas y el canal
+nombres_caracterisiticas=[];
+%nombre de canales acomodados como la matriz de caracteristicas
+canales=["IR Canal 1" "IR Canal 2" "R Canal 1" "R Canal 2" "EMG Canal 1"  "EMG Canal 2"];
+
+for i=1:1:6 %canales
+    for  c=1:1:37    %caracteristicas
+        nombres_caracterisiticas=[nombres_caracterisiticas,caractetistica(1,c)+' ' + canales(1,i) ];
+    end
+end
+
+for i=1:1:10 %cambiar segun el numero de caracteriticas que quiera ver m = [10,15,20,25,30,50]
+    fprintf('La característica N° %d es : %s \n', i, nombres_caracterisiticas(idx(i)));
+end
+
+%% graficas ranking
+
+idxInf = find(isinf(scores));
+figure()
+bar(scores(idx))
+xlabel('Predictor rank')
+ylabel('Predictor importance score')
+
 %% Clasificación
 
 % Apply Croos-Validation and Different Classifiers to predict data (LDA, SVM, KNN, DT,NB),
@@ -663,24 +687,140 @@ legend
 A=5;
 movement=4;
 trial=10;
-m = [10,15,20,25,30,50]; % Select quantity of best features.
+%m = [3,10,15,20,25,30,50]; % Select quantity of best features.
+%m = [15,20,25,30,50];
+m=[5,10,15];
 %close all;
 for n = 1:length(m)
-    [LDA_FRan(:,n), SVM_FRan(:,n), KNN_FRan(:,n), DT_FRan(:,n), NB_FRan(:,n)] = ...
+    [LDA_FRan(:,n), NB_FRan(:,n)] = ...
         xvalidation_FtRan(Mat_completa, guia, A, movement,trial,idx,m,n);
 end
 
 LDA_FRan
-SVM_FRan
-KNN_FRan
-DT_FRan
+%SVM_FRan
+%KNN_FRan
+%DT_FRan
 NB_FRan
 
 LDA = mean(LDA_FRan);
-SVM = mean(SVM_FRan);
-KNN = mean(KNN_FRan);
-DT = mean(DT_FRan);
+%SVM = mean(SVM_FRan);
+%KNN = mean(KNN_FRan);
+%DT = mean(DT_FRan);
 NB = mean(NB_FRan);
 
-Result = [LDA SVM KNN DT NB]
+%Result = [LDA SVM KNN DT NB]
+Result = [LDA NB]
 
+% -------------------------------------------------------------------------
+%%  Pruebas con diferentes combinaciones de caracterisisticas
+% -------------------------------------------------------------------------
+% propuesta de pruebas de caracteristicas para la clasificación
+
+Mat={[Ir_ft'],[Ir2_ft'],[R_ft'],[R2_ft'],[Emg_ft'],[Emg2_ft']};
+
+for i=1:1:6
+    [idx,scores] = fscchi2(Mat{1,i},guia);
+    
+    cnt = 1;
+    figure()
+    for n = 1:10:40
+        scatter3(Mat{1,i}(n:n+9,idx(1)), Mat{1,i}(n:n+9,idx(2)),Mat{1,i}(n:n+9,idx(3)),color(cnt),'filled')
+        hold on
+        title("Mejores 3 caracteristica de " + canales(i))
+        cnt = cnt+1;
+    end
+    
+    fprintf('La característica N° 1, 2 y 3 del canal %d son: %s ,%s , %s \n',i,caractetistica(idx(1)), caractetistica(idx(2)), caractetistica(idx(3)));
+end
+
+%% Clasificación con diferentes combinaciones
+
+Mat_EMG=[Emg_ft',Emg2_ft'];
+Mat_IR=[Ir_ft',Ir2_ft'];
+Mat_R=[R_ft',R2_ft'];
+Mat_EMG_IR=[Ir_ft',Ir2_ft',Emg_ft',Emg2_ft'];
+Mat_EMG_R=[R_ft',R2_ft',Emg_ft',Emg2_ft'];
+Mat_IR_R=[Ir_ft',Ir2_ft',R_ft',R2_ft'];
+
+Mat={[Mat_EMG],[Mat_IR],[Mat_R],[Mat_EMG_IR],[Mat_EMG_R],[Mat_IR_R]};
+
+for Nm=1:1:length(Mat) % numero de matrices
+    
+    %Chi2
+    % Graficas de disperción
+    color=["g" "b" "y" "c" "k"  "r" "m" "w"];
+    
+    % disperción de las 3 mejores caracteristicas generales
+    
+     [idx,scores] = fscchi2(Mat{1,Nm},guia);
+    
+    cnt = 1;
+    figure()
+    for n = 1:10:40
+        scatter3(Mat{1,Nm}(n:n+9,idx(1)), Mat{1,Nm}(n:n+9,idx(2)),Mat{1,Nm}(n:n+9,idx(3)),color(cnt),'filled')
+        hold on
+        title("Mejores 3 caracteristica")
+        cnt = cnt+1;
+    end
+    legend
+    
+    % Ranking de las caracteriticas
+    %vector con el nombre de las caracteristicas y el canal
+    nombres_caracterisiticas=[];
+    %nombre de canales acomodados como la matriz de caracteristicas  
+    canales_Mat_EMG=["Emg_ft","Emg2_ft"];
+    canales_Mat_IR=["Ir_ft","Ir2_ft"];
+    canales_Mat_R=["R_ft","R2_ft"];
+    canales_Mat_EMG_IR=["Ir_ft","Ir2_ft","Emg_ft","Emg2_ft"];
+    canales_Mat_EMG_R=["R_ft","R2_ft","Emg_ft","Emg2_ft"];
+    canales_Mat_IR_R=["Ir_ft","Ir2_ft","R_ft","R2_ft"];
+    
+    Todos_los_canales={[canales_Mat_EMG],[canales_Mat_IR],[canales_Mat_R],[canales_Mat_EMG_IR],[canales_Mat_EMG_R],[canales_Mat_IR_R]};
+    
+    
+    for i=1:1:length(Todos_los_canales{1,Nm}) %canales
+        for  c=1:1:37    %caracteristicas
+            nombres_caracterisiticas=[nombres_caracterisiticas,caractetistica(1,c)+' ' + Todos_los_canales{1,Nm}(1,i) ];
+        end
+    end
+    
+    for i=1:1:10 %cambiar segun el numero de caracteriticas que quiera ver m = [10,15,20,25,30,50]
+        fprintf('La característica N° %d es : %s \n', i, nombres_caracterisiticas(idx(i)));
+    end
+    
+    % graficas ranking
+    
+    idxInf = find(isinf(scores));
+    figure()
+    bar(scores(idx))
+    xlabel('Predictor rank')
+    ylabel('Predictor importance score')
+    
+    % Clasificación
+      
+    A=5;
+    movement=4;
+    trial=10;
+     m = [5,10,15];
+    for n = 1:length(m)
+        [LDA_FRan(:,n), NB_FRan(:,n)] = ...
+            xvalidation_FtRan(Mat{1,Nm}, guia, A, movement,trial,idx,m,n);
+    end
+    
+    LDA_FRan
+    %SVM_FRan
+    %KNN_FRan
+    %DT_FRan
+    NB_FRan
+    
+    LDA = mean(LDA_FRan);
+    %SVM = mean(SVM_FRan);
+    %KNN = mean(KNN_FRan);
+    %DT = mean(DT_FRan);
+    NB = mean(NB_FRan);
+    
+    %Result = [LDA SVM KNN DT NB]
+    Result = [Result;LDA NB];
+end
+
+Result

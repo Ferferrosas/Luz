@@ -1,1 +1,0 @@
-archivos para que funcione el programa guia para el protoclo de adqusiisción en python

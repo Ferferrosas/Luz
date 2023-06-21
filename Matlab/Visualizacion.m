@@ -130,9 +130,9 @@ plot(Tiempo,Datos_bajados(:,4));
 xlim([-inf, inf])
 ylim([-1000, 1000])
 for i=1:1:40
-    if(rem(i, 10)~=0)
+    if(rem(i-1, 10)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
-    elseif(rem(i, 10)==0)
+    elseif(rem(i-1, 10)==0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'k', 'LineStyle', '--')
     end
 end
@@ -145,9 +145,9 @@ plot(Tiempo,Datos_bajados(:,5));
 xlim([-inf, inf])
 ylim([-2000, 2000])
 for i=1:1:40
-    if(rem(i, 10)~=0)
+    if(rem(i-1, 10)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
-    elseif(rem(i, 10)==0)
+    elseif(rem(i-1, 10)==0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'k', 'LineStyle', '--')
     end
 end
@@ -157,7 +157,7 @@ hold on;
 plot(Tiempo,Datos_bajados(:,3));
 plot(Tiempo,Datos_bajados(:,6));
 for i=1:1:40
-    if(rem(i, 10)~=0)
+    if(rem(i-1, 10)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
     else
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'k', 'LineStyle', '--')
@@ -688,28 +688,27 @@ A=5;
 movement=4;
 trial=10;
 %m = [3,10,15,20,25,30,50]; % Select quantity of best features.
-%m = [15,20,25,30,50];
-m=[5,10,15];
+m = [15,20,25,30,50];
 %close all;
 for n = 1:length(m)
-    [LDA_FRan(:,n), NB_FRan(:,n)] = ...
+    [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
         xvalidation_FtRan(Mat_completa, guia, A, movement,trial,idx,m,n);
 end
 
 LDA_FRan
-%SVM_FRan
-%KNN_FRan
-%DT_FRan
+SVM_FRan
+KNN_FRan
+DT_FRan
 NB_FRan
 
 LDA = mean(LDA_FRan);
-%SVM = mean(SVM_FRan);
-%KNN = mean(KNN_FRan);
-%DT = mean(DT_FRan);
+SVM = mean(SVM_FRan);
+KNN = mean(KNN_FRan);
+DT = mean(DT_FRan);
 NB = mean(NB_FRan);
 
-%Result = [LDA SVM KNN DT NB]
-Result = [LDA NB]
+Result = [LDA SVM KNN DT NB]
+%ResultT = [LDA NB]
 
 % -------------------------------------------------------------------------
 %%  Pruebas con diferentes combinaciones de caracterisisticas
@@ -735,6 +734,7 @@ end
 
 %% Clasificación con diferentes combinaciones
 
+Mat_completa =[Ir_ft',Ir2_ft',R_ft',R2_ft',Emg_ft',Emg2_ft'];
 Mat_EMG=[Emg_ft',Emg2_ft'];
 Mat_IR=[Ir_ft',Ir2_ft'];
 Mat_R=[R_ft',R2_ft'];
@@ -743,7 +743,7 @@ Mat_EMG_R=[R_ft',R2_ft',Emg_ft',Emg2_ft'];
 Mat_IR_R=[Ir_ft',Ir2_ft',R_ft',R2_ft'];
 
 Mat={[Mat_EMG],[Mat_IR],[Mat_R],[Mat_EMG_IR],[Mat_EMG_R],[Mat_IR_R]};
-
+Result=[];
 for Nm=1:1:length(Mat) % numero de matrices
     
     %Chi2
@@ -752,7 +752,7 @@ for Nm=1:1:length(Mat) % numero de matrices
     
     % disperción de las 3 mejores caracteristicas generales
     
-     [idx,scores] = fscchi2(Mat{1,Nm},guia);
+    [idx,scores] = fscchi2(Mat{1,Nm},guia);
     
     cnt = 1;
     figure()
@@ -767,7 +767,7 @@ for Nm=1:1:length(Mat) % numero de matrices
     % Ranking de las caracteriticas
     %vector con el nombre de las caracteristicas y el canal
     nombres_caracterisiticas=[];
-    %nombre de canales acomodados como la matriz de caracteristicas  
+    %nombre de canales acomodados como la matriz de caracteristicas
     canales_Mat_EMG=["Emg_ft","Emg2_ft"];
     canales_Mat_IR=["Ir_ft","Ir2_ft"];
     canales_Mat_R=["R_ft","R2_ft"];
@@ -797,30 +797,179 @@ for Nm=1:1:length(Mat) % numero de matrices
     ylabel('Predictor importance score')
     
     % Clasificación
-      
+    
     A=5;
     movement=4;
     trial=10;
-     m = [5,10,15];
+    m = [5,10,15];
     for n = 1:length(m)
-        [LDA_FRan(:,n), NB_FRan(:,n)] = ...
+        [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
             xvalidation_FtRan(Mat{1,Nm}, guia, A, movement,trial,idx,m,n);
     end
     
     LDA_FRan
-    %SVM_FRan
-    %KNN_FRan
-    %DT_FRan
+    SVM_FRan
+    KNN_FRan
+    DT_FRan
     NB_FRan
     
     LDA = mean(LDA_FRan);
-    %SVM = mean(SVM_FRan);
-    %KNN = mean(KNN_FRan);
-    %DT = mean(DT_FRan);
+    SVM = mean(SVM_FRan);
+    KNN = mean(KNN_FRan);
+    DT = mean(DT_FRan);
     NB = mean(NB_FRan);
     
     %Result = [LDA SVM KNN DT NB]
-    Result = [Result;LDA NB];
+    Result = [Result;LDA SVM KNN DT NB];
 end
 
 Result
+
+%% Caracteriticas temporales
+
+incremento=47;
+
+Ir_t=[]; R_t=[]; Env_t=[];Ir2_t=[];R2_t=[];Env2_t=[];
+for rep=1:1:40
+    ventana=190;
+    for punto=1:1:9
+        Ir_t(rep,punto) = Ir(rep,ventana);
+        R_t(rep,punto) = R(rep,ventana);
+        env_Emg_t(rep,punto) = env_Emg(rep,ventana);
+        Ir2_t(rep,punto) = Ir2(rep,ventana);
+        R2_t(rep,punto) = R2(rep,ventana);
+        env_Emg2_t(rep,punto) = env_Emg2(rep,ventana);
+        ventana=ventana+incremento;
+    end
+end
+
+%% Reconstrucción de la señal
+
+% L_pulso_T=(9*40)/4.5;
+% Tiempo_T = (0:1/4.5:L_pulso_T-(1/4.5))';
+% 
+% %if(rem(mov-1, 10)~=0)
+% incremento=4.5000;
+% figure()
+% for mov=1:1:40
+%     inicio=1;
+%     subplot(3,2,1)
+%     plot(Tiempo_T(:,inicio:inicio+incremento),Ir_t(mov,:),'LineWidth',1);
+%     ylim([-inf inf])
+%     xlim([-inf inf])
+%     title(Nombres_canales(1))
+%     xlabel("Tiempo (seg)")
+%     hold on
+%     sgtitle(" Promedios de movimientos Sensor 1" )
+% end
+
+
+%% Clasificación
+
+Mat_completa_t =[Ir_t,Ir2_t,R_t,R2_t,env_Emg_t,env_Emg2_t];
+
+
+%Chi2
+% Graficas de disperción
+color=["g" "b" "y" "c" "k"  "r" "m" "w"];
+
+% disperción de las 3 mejores caracteristicas generales
+
+[idx,scores] = fscchi2(Mat_completa_t,guia);
+
+cnt = 1;
+figure()
+for n = 1:10:40
+    scatter3(Mat_completa_t(n:n+9,idx(1)), Mat_completa_t(n:n+9,idx(2)),Mat_completa_t(n:n+9,idx(3)),color(cnt),'filled')
+    hold on
+    title("Mejores 3 caracteristica")
+    cnt = cnt+1;
+end
+legend
+
+% Clasificación
+
+A=5;
+movement=4;
+trial=10;
+m = [20,30,40,50,54];
+for n = 1:length(m)
+    [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
+        xvalidation_FtRan(Mat_completa_t, guia, A, movement,trial,idx,m,n);
+end
+
+LDA_FRan
+SVM_FRan
+KNN_FRan
+DT_FRan
+NB_FRan
+
+LDA = mean(LDA_FRan);
+SVM = mean(SVM_FRan);
+KNN = mean(KNN_FRan);
+DT = mean(DT_FRan);
+NB = mean(NB_FRan);
+
+%Result = [LDA SVM KNN DT NB]
+ResultT_t = [LDA SVM KNN DT NB]
+
+
+
+%% Clasificación con diferentes combinaciones
+Mat_EMG_t=[env_Emg_t,env_Emg2_t];
+Mat_IR_t=[Ir_t,Ir2_t];
+Mat_R_t=[R_t,R2_t];
+Mat_EMG_IR_t=[Ir_t,Ir2_t,env_Emg_t,env_Emg2_t];
+Mat_EMG_R_t=[R_t,R2_t,env_Emg_t,env_Emg2_t];
+Mat_IR_R_t=[Ir_t,Ir2_t,R_t,R2_t];
+
+Mat_t={[Mat_EMG_t],[Mat_IR_t],[Mat_R_t],[Mat_EMG_IR_t],[Mat_EMG_R_t],[Mat_IR_R_t]};
+Result_t=[];
+for Nm=1:1:length(Mat_t) % numero de matrices
+    
+    %Chi2
+    % Graficas de disperción
+    color=["g" "b" "y" "c" "k"  "r" "m" "w"];
+    
+    % disperción de las 3 mejores caracteristicas generales
+    
+    [idx,scores] = fscchi2(Mat_t{1,Nm},guia);
+    
+    cnt = 1;
+    figure()
+    for n = 1:10:40
+        scatter3(Mat_t{1,Nm}(n:n+9,idx(1)), Mat_t{1,Nm}(n:n+9,idx(2)),Mat_t{1,Nm}(n:n+9,idx(3)),color(cnt),'filled')
+        hold on
+        title("Mejores 3 caracteristica")
+        cnt = cnt+1;
+    end
+    legend
+    
+    % Clasificación
+    
+    A=5;
+    movement=4;
+    trial=10;
+    m = [6,12,18];
+    for n = 1:length(m)
+        [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
+            xvalidation_FtRan(Mat_t{1,Nm}, guia, A, movement,trial,idx,m,n);
+    end
+    
+    LDA_FRan
+    SVM_FRan
+    KNN_FRan
+    DT_FRan
+    NB_FRan
+    
+    LDA = mean(LDA_FRan);
+    SVM = mean(SVM_FRan);
+    KNN = mean(KNN_FRan);
+    DT = mean(DT_FRan);
+    NB = mean(NB_FRan);
+    
+    %Result = [LDA SVM KNN DT NB]
+    Result_t = [Result_t;LDA SVM KNN DT NB];
+end
+
+Result_t

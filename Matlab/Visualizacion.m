@@ -40,7 +40,7 @@ for i=1:1:N_senales
     borraraltos=find(promedio*1.1 <=Datos(:,i));
     borrar=[borrarbajos,borraraltos];
     senal=Datos(:,i);
-    senal(borrar)=[promedio];
+    senal(borrar)=promedio;
     Datos(:,i)=senal;
 end
 
@@ -667,7 +667,7 @@ for i=1:1:6 %canales
     end
 end
 
-for i=1:1:10 %cambiar segun el numero de caracteriticas que quiera ver m = [10,15,20,25,30,50]
+for i=1:1:3 %cambiar segun el numero de caracteriticas que quiera ver m = [10,15,20,25,30,50]
     fprintf('La característica N° %d es : %s \n', i, nombres_caracterisiticas(idx(i)));
 end
 
@@ -707,7 +707,7 @@ KNN = mean(KNN_FRan);
 DT = mean(DT_FRan);
 NB = mean(NB_FRan);
 
-Result = [LDA SVM KNN DT NB]
+ResultT= [LDA SVM KNN DT NB]
 %ResultT = [LDA NB]
 
 % -------------------------------------------------------------------------
@@ -715,7 +715,7 @@ Result = [LDA SVM KNN DT NB]
 % -------------------------------------------------------------------------
 % propuesta de pruebas de caracteristicas para la clasificación
 
-Mat={[Ir_ft'],[Ir2_ft'],[R_ft'],[R2_ft'],[Emg_ft'],[Emg2_ft']};
+Mat={Ir_ft',Ir2_ft',R_ft',R2_ft',Emg_ft',Emg2_ft'};
 
 for i=1:1:6
     [idx,scores] = fscchi2(Mat{1,i},guia);
@@ -729,7 +729,7 @@ for i=1:1:6
         cnt = cnt+1;
     end
     
-    fprintf('La característica N° 1, 2 y 3 del canal %d son: %s ,%s , %s \n',i,caractetistica(idx(1)), caractetistica(idx(2)), caractetistica(idx(3)));
+    %fprintf('La característica N° 1, 2 y 3 del canal %d son: %s ,%s , %s \n',i,caractetistica(idx(1)), caractetistica(idx(2)), caractetistica(idx(3)));
 end
 
 %% Clasificación con diferentes combinaciones
@@ -742,7 +742,7 @@ Mat_EMG_IR=[Ir_ft',Ir2_ft',Emg_ft',Emg2_ft'];
 Mat_EMG_R=[R_ft',R2_ft',Emg_ft',Emg2_ft'];
 Mat_IR_R=[Ir_ft',Ir2_ft',R_ft',R2_ft'];
 
-Mat={[Mat_EMG],[Mat_IR],[Mat_R],[Mat_EMG_IR],[Mat_EMG_R],[Mat_IR_R]};
+Mat={Mat_EMG,Mat_IR,Mat_R,Mat_EMG_IR,Mat_EMG_R,Mat_IR_R};
 Result=[];
 for Nm=1:1:length(Mat) % numero de matrices
     
@@ -775,7 +775,7 @@ for Nm=1:1:length(Mat) % numero de matrices
     canales_Mat_EMG_R=["R_ft","R2_ft","Emg_ft","Emg2_ft"];
     canales_Mat_IR_R=["Ir_ft","Ir2_ft","R_ft","R2_ft"];
     
-    Todos_los_canales={[canales_Mat_EMG],[canales_Mat_IR],[canales_Mat_R],[canales_Mat_EMG_IR],[canales_Mat_EMG_R],[canales_Mat_IR_R]};
+    Todos_los_canales={canales_Mat_EMG,canales_Mat_IR,canales_Mat_R,canales_Mat_EMG_IR,canales_Mat_EMG_R,canales_Mat_IR_R};
     
     
     for i=1:1:length(Todos_los_canales{1,Nm}) %canales
@@ -785,7 +785,7 @@ for Nm=1:1:length(Mat) % numero de matrices
     end
     
     for i=1:1:10 %cambiar segun el numero de caracteriticas que quiera ver m = [10,15,20,25,30,50]
-        fprintf('La característica N° %d es : %s \n', i, nombres_caracterisiticas(idx(i)));
+       % fprintf('La característica N° %d es : %s \n', i, nombres_caracterisiticas(idx(i)));
     end
     
     % graficas ranking
@@ -807,11 +807,11 @@ for Nm=1:1:length(Mat) % numero de matrices
             xvalidation_FtRan(Mat{1,Nm}, guia, A, movement,trial,idx,m,n);
     end
     
-    LDA_FRan
-    SVM_FRan
-    KNN_FRan
-    DT_FRan
-    NB_FRan
+    LDA_FRan;
+    SVM_FRan;
+    KNN_FRan;
+    DT_FRan;
+    NB_FRan;
     
     LDA = mean(LDA_FRan);
     SVM = mean(SVM_FRan);
@@ -831,7 +831,7 @@ incremento=47;
 
 Ir_t=[]; R_t=[]; Env_t=[];Ir2_t=[];R2_t=[];Env2_t=[];
 for rep=1:1:40
-    ventana=190;
+    ventana=380;
     for punto=1:1:9
         Ir_t(rep,punto) = Ir(rep,ventana);
         R_t(rep,punto) = R(rep,ventana);
@@ -845,24 +845,26 @@ end
 
 %% Reconstrucción de la señal
 
-% L_pulso_T=(9*40)/4.5;
-% Tiempo_T = (0:1/4.5:L_pulso_T-(1/4.5))';
-% 
-% %if(rem(mov-1, 10)~=0)
-% incremento=4.5000;
-% figure()
-% for mov=1:1:40
-%     inicio=1;
-%     subplot(3,2,1)
-%     plot(Tiempo_T(:,inicio:inicio+incremento),Ir_t(mov,:),'LineWidth',1);
-%     ylim([-inf inf])
-%     xlim([-inf inf])
-%     title(Nombres_canales(1))
-%     xlabel("Tiempo (seg)")
-%     hold on
-%     sgtitle(" Promedios de movimientos Sensor 1" )
-% end
+L_pulso_T=(9*40)/4.5;
+Tiempo_T = (0:1/4.5:L_pulso_T-(1/4.5))';
+temporales={Ir_t,R_t,env_Emg_t,Ir2_t,R2_t,env_Emg2_t};
+%if(rem(mov-1, 10)~=0)
+incremento=8;
 
+figure()
+for i=1:1:6
+    inicio=1;
+    for mov=1:1:40
+        subplot(3,2,i)
+        plot(Tiempo_T(inicio:inicio+incremento,:),temporales{1,i}(mov,:),'LineWidth',1);
+        ylim([-inf inf])
+        xlim([-inf inf])
+        title(Nombres_canales(1))
+        hold on
+        sgtitle("Reconstruccion senales caracteristicas temporales" )
+        inicio=inicio+incremento;
+    end
+end
 
 %% Clasificación
 
@@ -923,7 +925,7 @@ Mat_EMG_IR_t=[Ir_t,Ir2_t,env_Emg_t,env_Emg2_t];
 Mat_EMG_R_t=[R_t,R2_t,env_Emg_t,env_Emg2_t];
 Mat_IR_R_t=[Ir_t,Ir2_t,R_t,R2_t];
 
-Mat_t={[Mat_EMG_t],[Mat_IR_t],[Mat_R_t],[Mat_EMG_IR_t],[Mat_EMG_R_t],[Mat_IR_R_t]};
+Mat_t={Mat_EMG_t,Mat_IR_t,Mat_R_t,Mat_EMG_IR_t,Mat_EMG_R_t,Mat_IR_R_t};
 Result_t=[];
 for Nm=1:1:length(Mat_t) % numero de matrices
     
@@ -956,11 +958,11 @@ for Nm=1:1:length(Mat_t) % numero de matrices
             xvalidation_FtRan(Mat_t{1,Nm}, guia, A, movement,trial,idx,m,n);
     end
     
-    LDA_FRan
-    SVM_FRan
-    KNN_FRan
-    DT_FRan
-    NB_FRan
+    LDA_FRan;
+    SVM_FRan;
+    KNN_FRan;
+    DT_FRan;
+    NB_FRan;
     
     LDA = mean(LDA_FRan);
     SVM = mean(SVM_FRan);

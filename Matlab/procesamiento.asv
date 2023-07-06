@@ -651,8 +651,8 @@ Mat_completa =[Ir_ft',Ir2_ft',R_ft',R2_ft',Emg_ft',Emg2_ft'];
 
 cnt = 1;
 figure()
-for n = 1:10:40
-    scatter3(Mat_completa(n:n+9,idx(1)), Mat_completa(n:n+9,idx(2)),Mat_completa(n:n+9,idx(3)),color(cnt),'filled')
+for n = 1:N_repeticiones:N_pulsos
+    scatter3(Mat_completa(n:n+Inicio_Mov,idx(1)), Mat_completa(n:n+Inicio_Mov,idx(2)),Mat_completa(n:n+Inicio_Mov,idx(3)),color(cnt),'filled')
     hold on
     title("Todos los canales FT")
     cnt = cnt+1;
@@ -665,7 +665,7 @@ nombres_caracterisiticas=[];
 %nombre de canales acomodados como la matriz de caracteristicas
 canales=["IR Canal 1" "IR Canal 2" "R Canal 1" "R Canal 2" "EMG Canal 1"  "EMG Canal 2"];
 
-for i=1:1:6 %canales
+for i=1:1:N_senales
     for  c=1:1:37    %caracteristicas
         nombres_caracterisiticas=[nombres_caracterisiticas,caractetistica(1,c)+' ' + canales(1,i) ];
     end
@@ -689,14 +689,14 @@ ylabel('Predictor importance score')
 % returns the variable Fran with the average after apply the classifiers.
 
 A=5;
-movement=4;
-trial=10;
+N_movimientos=4;
+N_repeticiones=10;
 %m = [3,10,15,20,25,30,50]; % Select quantity of best features.
 m = [15,20,25,30,50];
 %close all;
 for n = 1:length(m)
     [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
-        xvalidation_FtRan(Mat_completa, guia, A, movement,trial,idx,m,n);
+        xvalidation_FtRan(Mat_completa, guia, A, N_movimientos,N_repeticiones,idx,m,n);
 end
 
 LDA_FRan
@@ -760,7 +760,7 @@ for Nm=1:1:length(Mat) % numero de matrices
     
     cnt = 1;
     figure()
-    for n = 1:10:40
+    for n = 1:N_repeticiones:N_pulsos
         scatter3(Mat{1,Nm}(n:n+9,idx(1)), Mat{1,Nm}(n:n+9,idx(2)),Mat{1,Nm}(n:n+9,idx(3)),color(cnt),'filled')
         hold on
         title("Mejores 3 caracteristica")
@@ -803,12 +803,10 @@ for Nm=1:1:length(Mat) % numero de matrices
     % Clasificación
     
     A=5;
-    movement=4;
-    trial=10;
     m = [5,10,15];
     for n = 1:length(m)
         [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
-            xvalidation_FtRan(Mat{1,Nm}, guia, A, movement,trial,idx,m,n);
+            xvalidation_FtRan(Mat{1,Nm}, guia, A, N_movimientos,N_repeticiones,idx,m,n);
     end
     
     LDA_FRan;
@@ -834,7 +832,7 @@ Result
 incremento=47;
 
 Ir_t=[]; R_t=[]; Env_t=[];Ir2_t=[];R2_t=[];Env2_t=[];
-for rep=1:1:40
+for rep=1:1:N_pulsos
     ventana=380;
     for punto=1:1:9
         Ir_t(rep,punto) = Ir(rep,ventana);
@@ -856,9 +854,9 @@ temporales={Ir_t,R_t,env_Emg_t,Ir2_t,R2_t,env_Emg2_t};
 incremento=8;
 
 figure()
-for i=1:1:6
+for i=1:1:N_senales
     inicio=1;
-    for mov=1:1:40
+    for mov=1:1:N_pulsos
         subplot(3,2,i)
         plot(Tiempo_T(inicio:inicio+incremento,:),temporales{1,i}(mov,:),'LineWidth',1);
         ylim([-inf inf])
@@ -885,8 +883,8 @@ color=["g" "b" "y" "c" "k"  "r" "m" "w"];
 
 cnt = 1;
 figure()
-for n = 1:10:40
-    scatter3(Mat_completa_t(n:n+9,idx(1)), Mat_completa_t(n:n+9,idx(2)),Mat_completa_t(n:n+9,idx(3)),color(cnt),'filled')
+for n = 1:N_repeticiones:N_pulsos
+    scatter3(Mat_completa_t(n:n+Inicio_Mov,idx(1)), Mat_completa_t(n:n+Inicio_Mov,idx(2)),Mat_completa_t(n:n+Inicio_Mov,idx(3)),color(cnt),'filled')
     hold on
     title("todos los canales FT temporales")
     cnt = cnt+1;
@@ -896,12 +894,10 @@ legend
 % Clasificación
 
 A=5;
-movement=4;
-trial=10;
 m = [20,30,40,50,54];
 for n = 1:length(m)
     [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
-        xvalidation_FtRan(Mat_completa_t, guia, A, movement,trial,idx,m,n);
+        xvalidation_FtRan(Mat_completa_t, guia, A, N_movimientos,N_repeticiones,idx,m,n);
 end
 
 LDA_FRan
@@ -943,8 +939,8 @@ for Nm=1:1:length(Mat_t) % numero de matrices
     
     cnt = 1;
     figure()
-    for n = 1:10:40
-        scatter3(Mat_t{1,Nm}(n:n+9,idx(1)), Mat_t{1,Nm}(n:n+9,idx(2)),Mat_t{1,Nm}(n:n+9,idx(3)),color(cnt),'filled')
+    for n = 1:N_repeticiones:N_pulsos
+        scatter3(Mat_t{1,Nm}(n:n+Inicio_Mov,idx(1)), Mat_t{1,Nm}(n:n+Inicio_Mov,idx(2)),Mat_t{1,Nm}(n:n+Inicio_Mov,idx(3)),color(cnt),'filled')
         hold on
         title("Mejores 3 caracteristica")
         cnt = cnt+1;
@@ -954,12 +950,10 @@ for Nm=1:1:length(Mat_t) % numero de matrices
     % Clasificación
     
     A=5;
-    movement=4;
-    trial=10;
     m = [6,12,18];
     for n = 1:length(m)
         [LDA_FRan(:,n),SVM_FRan(:,n),KNN_FRan(:,n),DT_FRan(:,n), NB_FRan(:,n)] = ...
-            xvalidation_FtRan(Mat_t{1,Nm}, guia, A, movement,trial,idx,m,n);
+            xvalidation_FtRan(Mat_t{1,Nm}, guia, A, N_movimientos,N_repeticiones,idx,m,n);
     end
     
     LDA_FRan;

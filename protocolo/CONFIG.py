@@ -18,8 +18,8 @@ restTime= 2
 
 n = 0
 
-n_flexion_met = n
-n_extension_met = 10
+n_flexion_met = 20
+n_extension_met = n
 n_flexion_pha = n
 n_extension_pha = n
 n_adduction_met = n

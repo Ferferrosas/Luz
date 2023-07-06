@@ -15,7 +15,10 @@ data=readmatrix('fer.csv');
 fs = 190;
 N_canales=2;
 N_senales=(N_canales*3);
-Registro_banderas=data(:,7);
+Registro_banderas=data(:,N_senales+1);
+N_movimientos=4;
+N_repeticiones=10;
+N_pulsos=N_repeticiones*N_movimientos;
 Nombres_canales=["IR Canal 1", "R Canal 1","EMG Canal 1",  "IR Canal 2", "R Canal 2", "EMG Canal 2"];
 
 Datos= data;
@@ -26,7 +29,7 @@ Tiempo = (0:1/190:L_total-(1/190))';
 
 
 figure()
-for i=1:1:6
+for i=1:1:N_senales
     subplot(N_canales,3,i)
     plot(Tiempo,Datos(:,i));
     sgtitle("Sujeto 1 registro completo" )
@@ -88,7 +91,7 @@ ylabel('Amplitud');
 title('Espectro de Amplitud');
 %% Filtro EMG
 
-for i=3:3:6
+for i=3:3:N_senales
     senal=Datos(:,i); %cambiar este por 3 y 6
     Datos(:,i)= bandpassfilt(93,94,190,8,senal);
     
@@ -113,12 +116,12 @@ for i=1:1:N_senales
 end
 %Datos_bajados= Datos;
 %% Marcar movimientos
-Posiciones_contracciones=zeros(10,4);
+Posiciones_contracciones=zeros(N_repeticiones,N_movimientos);
 %buscar los incios de las banderas
-for i=1:1:4%movimientos
+for i=1:1:N_movimientos%movimientos
     Posiciones_contracciones(:,i)=find(Banderas_Movimientos(i)==Registro_banderas);
 end
-x=reshape(Posiciones_contracciones, 40, 1);
+x=reshape(Posiciones_contracciones, N_pulsos, 1);
 
 %line([Tiempo(x(1)) Tiempo(x(1))], ylim, 'Color', 'g', 'LineStyle', '--')
 
@@ -129,10 +132,10 @@ plot(Tiempo,Datos_bajados(:,1));
 plot(Tiempo,Datos_bajados(:,4));
 xlim([-inf, inf])
 ylim([-1000, 1000])
-for i=1:1:40
-    if(rem(i-1, 10)~=0)
+for i=1:1:N_pulsos
+    if(rem(i-1, N_repeticiones)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
-    elseif(rem(i-1, 10)==0)
+    elseif(rem(i-1, N_repeticiones)==0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'k', 'LineStyle', '--')
     end
 end
@@ -144,10 +147,10 @@ plot(Tiempo,Datos_bajados(:,2));
 plot(Tiempo,Datos_bajados(:,5));
 xlim([-inf, inf])
 ylim([-2000, 2000])
-for i=1:1:40
-    if(rem(i-1, 10)~=0)
+for i=1:1:N_pulsos
+    if(rem(i-1, N_repeticiones)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
-    elseif(rem(i-1, 10)==0)
+    elseif(rem(i-1, N_repeticiones)==0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'k', 'LineStyle', '--')
     end
 end
@@ -156,8 +159,8 @@ subplot(3,1,3)
 hold on;
 plot(Tiempo,Datos_bajados(:,3));
 plot(Tiempo,Datos_bajados(:,6));
-for i=1:1:40
-    if(rem(i-1, 10)~=0)
+for i=1:1:N_pulsos
+    if(rem(i-1, N_repeticiones)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
     else
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'k', 'LineStyle', '--')
@@ -177,8 +180,8 @@ disp("Mano abierta , Puño , Flexión muñeca , Extensión muñeca");
 %% Segmentar movimientos
 
 Ir=[]; R=[]; Emg=[];Ir2=[]; R2=[]; Emg2=[];
-for m=1:1:4 %movimientos
-    for rep=1:1:10 %repetición
+for m=1:1:N_movimientos %movimientos
+    for rep=1:1:N_repeticiones %repetición
         Ir=[Ir;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,1)'];
         R=[R;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,2)'];
         Emg=[Emg;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,3)'];
@@ -188,7 +191,7 @@ for m=1:1:4 %movimientos
     end
 end
 
-for m=1:1:40
+for m=1:1:N_pulsos
     [env_Emg(m,:),] = envelope(abs(Emg(m,:)),190);
     [env_Emg2(m,:),] = envelope(abs(Emg2(m,:)),190);
 end
@@ -196,20 +199,21 @@ end
 %% Promedios y Std
 
 m=1;
-for mov=10:10:40
-    promedios_Ir(m,:)=mean(Ir(mov-9:mov,:));
-    promedios_R(m,:)=mean(R(mov-9:mov,:));
-    promedios_Env(m,:)=mean(env_Emg(mov-9:mov,:));
-    std_Ir(m,:)=std(Ir(mov-9:mov,:));
-    std_R(m,:)=std(R(mov-9:mov,:));
-    std_Env(m,:)=std(env_Emg(mov-9:mov,:));
+Inicio_Mov=N_repeticiones-1;
+for mov=N_repeticiones:N_repeticiones:N_pulsos
+    promedios_Ir(m,:)=mean(Ir(mov-Inicio_Mov:mov,:));
+    promedios_R(m,:)=mean(R(mov-Inicio_Mov:mov,:));
+    promedios_Env(m,:)=mean(env_Emg(mov-Inicio_Mov:mov,:));
+    std_Ir(m,:)=std(Ir(mov-Inicio_Mov:mov,:));
+    std_R(m,:)=std(R(mov-Inicio_Mov:mov,:));
+    std_Env(m,:)=std(env_Emg(mov-Inicio_Mov:mov,:));
     
-    promedios_Ir2(m,:)=mean(Ir2(mov-9:mov,:));
-    promedios_R2(m,:)=mean(R2(mov-9:mov,:));
-    promedios_Env2(m,:)=mean(env_Emg2(mov-9:mov,:));
-    std_Ir2(m,:)=std(Ir2(mov-9:mov,:));
-    std_R2(m,:)=std(R2(mov-9:mov,:));
-    std_Env2(m,:)=std(env_Emg2(mov-9:mov,:));
+    promedios_Ir2(m,:)=mean(Ir2(mov-Inicio_Mov:mov,:));
+    promedios_R2(m,:)=mean(R2(mov-Inicio_Mov:mov,:));
+    promedios_Env2(m,:)=mean(env_Emg2(mov-Inicio_Mov:mov,:));
+    std_Ir2(m,:)=std(Ir2(mov-Inicio_Mov:mov,:));
+    std_R2(m,:)=std(R2(mov-Inicio_Mov:mov,:));
+    std_Env2(m,:)=std(env_Emg2(mov-Inicio_Mov:mov,:));
     m=m+1;
 end
 
@@ -222,7 +226,7 @@ Tiempo = (0:1/190:L_pulso-(1/190))';
 colores=["g" "b" "y" "c" "k"  "r" "m" "w"];
 i=0;
 figure()
-for mov=1:1:4
+for mov=1:1:N_movimientos
     subplot(3,1,1)
     plot(Tiempo,promedios_Ir(mov,:),colores(mov), 'LineWidth',1);
     ylim([-inf inf])
@@ -249,7 +253,7 @@ for mov=1:1:4
 end
 
 figure()
-for mov=1:1:4
+for mov=1:1:N_movimientos
     subplot(3,1,1)
     plot(Tiempo,promedios_Ir2(mov,:),colores(mov+3), 'LineWidth',1);
     ylim([-inf inf])
@@ -277,7 +281,7 @@ end
 
 %% STD
 
-for mov=1:1:4
+for mov=1:1:N_movimientos
     figure()
     subplot(3,1,1)
     %sensor 1
@@ -362,7 +366,7 @@ end
 
 figure()
 n=1;
-for mov=1:1:4
+for mov=1:1:N_movimientos
     
     subplot(3,5,n)
     hold on;
@@ -478,7 +482,7 @@ end
 
 figure()
 n=1;
-for mov=1:1:4
+for mov=1:1:N_movimientos
     
     subplot(3,1,1)
     hold on;
@@ -534,7 +538,7 @@ end
 
 figure()
 n=1;
-for mov=1:1:4
+for mov=1:1:N_movimientos
     %Sensor 2
     
     subplot(3,1,1)
@@ -601,7 +605,7 @@ caractetistica=["fzc" "ewl" "emav" "asm" "ass"  "ltkeo" "card" "ldasdv"...
     "mmav2" "iemg" "dasdv" "damv" "rms" "vare" "wa" "ld" "mav" "zc"...
     "ssc" "wl" "mad" "iqr" "kurt" "skew" "cov" "sd" "var" "ae"];
 
-for m = 1:1:40
+for m = 1:1:N_pulsos
     for n =1:length(caractetistica)
         Ir_ft(n,m) = jfemg(caractetistica(n), Ir(m,:));
         R_ft(n,m) = jfemg(caractetistica(n), R(m,:));
@@ -619,8 +623,8 @@ end
 
 m=1;
 guia=[];
-for im = 1:4
-    for i = 1:10
+for im = 1:N_movimientos
+    for i = 1:N_repeticiones
         guia=[guia;Banderas_Movimientos(im)];
         m=m+1;
     end
@@ -647,10 +651,10 @@ Mat_completa =[Ir_ft',Ir2_ft',R_ft',R2_ft',Emg_ft',Emg2_ft'];
 
 cnt = 1;
 figure()
-for n = 1:10:40
-    scatter3(Mat_completa(n:n+9,idx(1)), Mat_completa(n:n+9,idx(2)),Mat_completa(n:n+9,idx(3)),color(cnt),'filled')
+for n = 1:N_repeticiones:N_pulsos
+    scatter3(Mat_completa(n:n+Inicio_Mov,idx(1)), Mat_completa(n:n+9,idx(2)),Mat_completa(n:n+9,idx(3)),color(cnt),'filled')
     hold on
-    title("Mejores 3 caracteristica")
+    title("Todos los canales FT")
     cnt = cnt+1;
 end
 legend
@@ -866,7 +870,7 @@ for i=1:1:6
     end
 end
 
-%% Clasificación
+%% Clasificación caracteristicas temporales
 
 Mat_completa_t =[Ir_t,Ir2_t,R_t,R2_t,env_Emg_t,env_Emg2_t];
 
@@ -884,7 +888,7 @@ figure()
 for n = 1:10:40
     scatter3(Mat_completa_t(n:n+9,idx(1)), Mat_completa_t(n:n+9,idx(2)),Mat_completa_t(n:n+9,idx(3)),color(cnt),'filled')
     hold on
-    title("Mejores 3 caracteristica")
+    title("todos los canales FT temporales")
     cnt = cnt+1;
 end
 legend
@@ -917,7 +921,7 @@ ResultT_t = [LDA SVM KNN DT NB]
 
 
 
-%% Clasificación con diferentes combinaciones
+%% Clasificación con diferentes combinaciones temporales
 Mat_EMG_t=[env_Emg_t,env_Emg2_t];
 Mat_IR_t=[Ir_t,Ir2_t];
 Mat_R_t=[R_t,R2_t];

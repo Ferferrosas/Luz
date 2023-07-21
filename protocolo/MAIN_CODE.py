@@ -4,6 +4,7 @@ import sys
 import os
 import pygame
 import time
+from utils import *
 
 import pyautogui
 import math
@@ -313,17 +314,11 @@ def visualinterface():
             pygame.draw.polygon(screen, upPink2, (point1UpArrow, point2UpArrow, point3UpArrow))
 
         SendID(',2000')
-        if FIN == 1:
+        if FIN == 1 and EXIT_ON_SERIAL == True:
             sys.exit()
 
-        pygame.draw.rect(screen, bigRecColor,
-                         (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                          Bigger_rectangle_height_new), 0)  # third direction bar
-        pygame.draw.rect(screen, bigRecEdgeColor,
-                         (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                          Bigger_rectangle_height_new),
-                         Bigthickness)  # edges of the rectangle (third)
-
+        pygame.draw.rect(screen, bigRecColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,Bigger_rectangle_height_new), 0)
+        pygame.draw.rect(screen, bigRecEdgeColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new),Bigthickness) 
         pygame.draw.rect(screen, barColor, (initial_x_new, Down_rectangle_Y, bar_width, bar_width))
         pygame.draw.rect(screen, barColor, (initial_x_new, Down_rectangle_Y, bar_width, bar_width))
         pygame.draw.rect(screen, barColor, (initial_x_new, Down_rectangle_Y, bar_width, bar_width))
@@ -331,122 +326,37 @@ def visualinterface():
         pygame.display.update()
         # new code for cue timing
 
-        # pygame.display.update()
-        # point1 = 0
-        # point2 = 0
-        # point3 = 0
-        if currentClass == 1:
-            screen.blit(IM_FLEXION_MET, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+        point1 = (centerOfScreen[0], Bigger_rectangle_Y)
+        point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+        point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)\
+        
+        context = globals().copy()
+        context.update(locals())
+
+        if currentClass   == 1:
+            draw_image_with_arrow(IM_EXTENSION_MET  , context)
         elif currentClass == 2:
-            screen.blit(IM_EXTENSION_MET, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_FLEXION_MET    , context)
         elif currentClass == 3:
-            screen.blit(IM_FLEXION_PHA, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-        elif currentClass == 4:
-            screen.blit(IM_EXTENSION_PHA, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_FLEXION_PHA    , context)
+        elif currentClass == 3:
+            draw_image_with_arrow(IM_EXTENSION_PHA  , context)
         elif currentClass == 5:
-            screen.blit(IM_ADDUCTION_MET, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_ABDUCTION_MET  , context)
         elif currentClass == 6:
-            screen.blit(IM_ABDUCTION_MET, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-        # elif currentClass == 7:
-        #     screen.blit(IM_PRONATION, (150, 150))
-        #     pygame.draw.rect(screen, arrowColor, (
-        #         centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-        #         Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-        #     point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-        #     point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-        #     point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-        # elif currentClass == 8:
-        #     screen.blit(IM_SUPINATION, (150, 150))
-        #     pygame.draw.rect(screen, arrowColor, (
-        #         centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-        #         Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-        #     point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-        #     point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-        #     point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_ABDUCTION_MET  , context)
         elif currentClass == 7:
-            screen.blit(IM_POINTING, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_POINTING       , context)
         elif currentClass == 8:
-            screen.blit(IM_FINGER_3, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_FINGER_3       , context)
         elif currentClass == 9:
-            screen.blit(IM_FINGER_2, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_FINGER_2       , context)
         elif currentClass == 10:
-            screen.blit(IM_MIDDLE_FINGER, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_MIDDLE_FINGER  , context)
         elif currentClass == 11:
-            screen.blit(IM_RING_FINGER, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_RING_FINGER    , context)
         else:
-            screen.blit(IM_PINKIE_FINGER, (150, 150))
-            pygame.draw.rect(screen, arrowColor, (
-                centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-            point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-            point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
+            draw_image_with_arrow(IM_PINKIE_FINGER  , context)
 
         pygame.draw.polygon(screen, arrowColor, (point1, point2, point3))
         pygame.display.update()
@@ -454,60 +364,42 @@ def visualinterface():
         # COMENTAMOS ESTO
         if currentClass == 1:
             SendID(',300')
-        #        SendID(',769')  # send Event CUE: 769 to LOOP to indicate flexion cue
         elif currentClass == 2:
             SendID(',400')
-        #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
         elif currentClass == 3:
             SendID(',500')
         elif currentClass == 4:
             SendID(',600')
-        #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
         elif currentClass == 5:
             SendID(',700')
-        #        SendID(',771')
         elif currentClass == 6:
             SendID(',800')
-        # if currentClass == 7:
-        #     SendID(',900')
-        # #        SendID(',769')  # send Event CUE: 769 to LOOP to indicate flexion cue
-        # if currentClass == 8:
-        #     SendID(',1000')
-        #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
         elif currentClass == 7:
             SendID(',1100')
         elif currentClass == 8:
             SendID(',1200')
-        #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
         elif currentClass == 9:
             SendID(',1300')
-        #        SendID(',771')
         elif currentClass == 10:
             SendID(',1400')
         elif currentClass == 11:
             SendID(',1500')
-        #        SendID(',771')
         elif currentClass == 12:
             SendID(',1600')
 
-        time.sleep(cueTime)  # wait for the period determined in a0_configFile.py
-
-        screen.fill(black)  # clear display
+        time.sleep(cueTime)  
+        screen.fill(black)
 
         prevTime = time.time()
         task_cue = 0
         if currentClass == 1 and task_cue == 0:
             SendID(',301')
-            if FIN == 1:
+            if FIN == 1 and EXIT_ON_SERIAL == True:
                 sys.exit()
-        #        sendTiD(7691)  # send Event: 7691 to LOOP to indicate start of flexion task
-        # task_cue = 1  # send this cue only once at the beginning of the task
         elif currentClass == 2 and task_cue == 0:
             SendID(',401')
             if FIN == 1:
                 sys.exit()
-        #        sendTiD(7701)  # send Event CUE: 7701 to LOOP to indicate start of extension task
-        # task_cue = 1  # send this cue only once at the beginning of the task
         elif currentClass == 3 and task_cue == 0:
             SendID(',501')
             if FIN == 1:
@@ -569,170 +461,37 @@ def visualinterface():
 
         fflag = 1
 
+        context = globals().copy()
+        context.update(locals())
+
         while True:
 
-            # x_bar = initial_x_new
-            # y_bar = Bigger_rectangle_Y
-            # delta_width = bar_width
-            # delta_width_1 = bar_width
-            # delta_height_2 = bar_width
-
-        # find how much the bar must move to the left based on how much time has passed
-            if currentClass == 1:
-                step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                y_bar = Bigger_rectangle_Y - step_size
-                delta_height_2 = bar_width + step_size
-            elif currentClass == 2:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 3:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 4:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 5:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 6:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            # elif currentClass == 7:
-            #      step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-            #      y_bar = Bigger_rectangle_Y - step_size
-            #      delta_height_2 = bar_width + step_size
-            # elif currentClass == 8:
-            #      step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-            #      y_bar = Bigger_rectangle_Y - step_size
-            #      delta_height_2 = bar_width + step_size
-            elif currentClass == 7:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 8:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 9:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 10:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            elif currentClass == 11:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-            else:
-                 step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-                 y_bar = Bigger_rectangle_Y - step_size
-                 delta_height_2 = bar_width + step_size
-        # re-draw the interface
+            step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
+            y_bar = Bigger_rectangle_Y - step_size
+            delta_height_2 = bar_width + step_size
+            
+            # re-draw the interface
             if fflag:
-                if currentClass == 1:
-                    screen.blit(IM_FLEXION_MET, (150, 150))
-                    pygame.draw.rect(screen, upGreen,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upGreen, (point1UpArrow, point2UpArrow, point3UpArrow))
+                class_to_color_image = {
+                    1:  (upGreen, IM_FLEXION_MET),
+                    2:  (upOrange, IM_EXTENSION_MET),
+                    3:  (upAqua, IM_FLEXION_PHA),
+                    4:  (upPink, IM_EXTENSION_PHA),
+                    5:  (upRed, IM_ADDUCTION_MET),
+                    6:  (upyellow, IM_ABDUCTION_MET),
+                    7:  (upBrown, IM_POINTING),
+                    8:  (upGoldenrod, IM_FINGER_3),
+                    9:  (uplightcoral, IM_FINGER_2),
+                    10: (upOlivedrab, IM_MIDDLE_FINGER),
+                    11: (upPeachpuff, IM_RING_FINGER),
+                    12: (upPink2, IM_PINKIE_FINGER)
+                }
+                
+                color, image = class_to_color_image.get(currentClass, (None, None))
+                context      = globals().copy()
+                context.update(locals())
+                draw_image_with_arrow_ff(color,image,context)
 
-                elif currentClass == 2:
-                    screen.blit(IM_EXTENSION_MET, (150, 150))
-                    pygame.draw.rect(screen, upOrange,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upOrange, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 3:
-                    screen.blit(IM_FLEXION_PHA, (150, 150))
-                    pygame.draw.rect(screen, upAqua,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upAqua, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 4:
-                    screen.blit(IM_EXTENSION_PHA, (150, 150))
-                    pygame.draw.rect(screen, upPink,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upPink, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 5:
-                    screen.blit(IM_ADDUCTION_MET, (150, 150))
-                    pygame.draw.rect(screen, upRed,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upRed, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 6:
-                    screen.blit(IM_ABDUCTION_MET, (150, 150))
-                    pygame.draw.rect(screen, upyellow,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upyellow, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                # if currentClass == 7:
-                #     screen.blit(IM_PRONATION, (150, 150))
-                #     pygame.draw.rect(screen, upAquamarine,
-                #                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                #                      0)  # Moving bar specs
-                #     pygame.draw.polygon(screen, upAquamarine, (point1UpArrow, point2UpArrow, point3UpArrow))
-                #
-                # if currentClass == 8:
-                #     screen.blit(IM_SUPINATION, (150, 150))
-                #     pygame.draw.rect(screen, upBlueviolet,
-                #                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                #                      0)  # Moving bar specs
-                #     pygame.draw.polygon(screen, upBlueviolet, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 7:
-                    screen.blit(IM_POINTING, (150, 150))
-                    pygame.draw.rect(screen, upBrown,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upBrown, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 8:
-                    screen.blit(IM_FINGER_3, (150, 150))
-                    pygame.draw.rect(screen, upGoldenrod,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upGoldenrod, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 9:
-                    screen.blit(IM_FINGER_2, (150, 150))
-                    pygame.draw.rect(screen, uplightcoral,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, uplightcoral, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 10:
-                    screen.blit(IM_MIDDLE_FINGER, (150, 150))
-                    pygame.draw.rect(screen, upOlivedrab,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upOlivedrab, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 11:
-                    screen.blit(IM_RING_FINGER, (150, 150))
-                    pygame.draw.rect(screen, upPeachpuff,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upPeachpuff, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                elif currentClass == 12:
-                    screen.blit(IM_PINKIE_FINGER, (150, 150))
-                    pygame.draw.rect(screen, upPink2,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-                    pygame.draw.polygon(screen, upPink2, (point1UpArrow, point2UpArrow, point3UpArrow))
                 fflag = 0
 
             pygame.draw.rect(screen, bigRecColor,
@@ -745,618 +504,74 @@ def visualinterface():
 
             pygame.draw.rect(screen, barColor, (initial_x_new, y_bar, bar_width, delta_height_2))  # draw up bar
 
-        # Drawing arrow polygon to point towards required task (right for extension and left for flexion)
-            if currentClass == 1:
-                screen.blit(IM_FLEXION_MET, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 2:
-                screen.blit(IM_EXTENSION_MET, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 3:
-                screen.blit(IM_FLEXION_PHA, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 4:
-                screen.blit(IM_EXTENSION_PHA, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 5:
-                screen.blit(IM_ADDUCTION_MET, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 6:
-                screen.blit(IM_ABDUCTION_MET, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            # elif currentClass == 7:
-            #     screen.blit(IM_PRONATION, (150, 150))
-            #     pygame.draw.rect(screen, arrowColor, (
-            #         centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-            #         Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            # elif currentClass == 8:
-            #     screen.blit(IM_SUPINATION, (150, 150))
-            #     pygame.draw.rect(screen, arrowColor, (
-            #         centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-            #         Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 7:
-                screen.blit(IM_POINTING, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 8:
-                screen.blit(IM_FINGER_3, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 9:
-                screen.blit(IM_FINGER_2, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 10:
-                screen.blit(IM_MIDDLE_FINGER, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            elif currentClass == 11:
-                screen.blit(IM_RING_FINGER, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
-            else:
-                screen.blit(IM_PINKIE_FINGER, (150, 150))
-                pygame.draw.rect(screen, arrowColor, (
-                    centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                    Bigger_rectangle_height / 2), thickness)  # Arrow Specs
+            context = globals().copy()
+            context.update(locals())
+
+            class_to_image = {
+                1: IM_FLEXION_MET,
+                2: IM_EXTENSION_MET,
+                3: IM_FLEXION_PHA,
+                4: IM_EXTENSION_PHA,
+                5: IM_ADDUCTION_MET,
+                6: IM_ABDUCTION_MET,
+                7: IM_POINTING,
+                8: IM_FINGER_3,
+                9: IM_FINGER_2,
+                10: IM_MIDDLE_FINGER,
+                11: IM_RING_FINGER,
+                12: IM_PINKIE_FINGER
+            }
+
+            image = class_to_image[currentClass]
+            draw_task_image(image, context)
+          
 
             pygame.draw.polygon(screen, arrowColor, (point1, point2, point3))
             pygame.display.update()
 
         # Stopping criteria based on taskTime that is set in a0_configFile.py
             if (time.time() - prevTime >= taskTime):
-            # COMENTAMOS ESTO
+                class_to_send_id = {1: ',302', 2: ',402', 3: ',502', 4: ',602', 5: ',702', 6: ',802', 9: ',1102', 10: ',1202', 11: ',1302', 12: ',1402', 13: ',1502', 14: ',1602'}
+                
+                if currentClass in class_to_send_id:
+                    SendID(class_to_send_id[currentClass])
 
-                if currentClass == 1:
-                    SendID(',302')
-                # send Event CUE: 7692 to LOOP to indicate end of flexion task and start of result view time
-                elif currentClass == 2:
-                    SendID(',402')
-                # send Event CUE: 7702 to LOOP to indicate end of extension task and start of result view time
-                elif currentClass == 3:
-                    SendID(',502')
-                elif currentClass == 4:
-                    SendID(',602')
-                # send Event CUE: 7702 to LOOP to indicate end of extension task and start of result view time
-                elif currentClass == 5:
-                    SendID(',702')
-                elif currentClass == 6:
-                    SendID(',802')
-                # elif currentClass == 7:
-                #     SendID(',902')
-                # # send Event CUE: 7702 to LOOP to indicate end of extension task and start of result view time
-                # elif currentClass == 8:
-                #     SendID(',1002')
-                elif currentClass == 9:
-                    SendID(',1102')
-                # send Event CUE: 7702 to LOOP to indicate end of extension task and start of result view time
-                elif currentClass == 10:
-                    SendID(',1202')
-                elif currentClass == 11:
-                    SendID(',1302')
-                elif currentClass == 12:
-                    SendID(',1402')
-                elif currentClass == 13:
-                    SendID(',1502')
-                elif currentClass == 14:
-                    SendID(',1602')
-
-            #                sendTiD(7712)
-            # <<<<<< RESULT CUE >>>>>>
-
-                pygame.draw.rect(screen, bigRecColor,
-                                 (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                  Bigger_rectangle_height_new), 0)  # third direction bar
-                pygame.draw.rect(screen, bigRecEdgeColor,
-                                 (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                  Bigger_rectangle_height_new),
-                                 Bigthickness)  # edges of the rectangle (third)
-                pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width),
-                                 thickness)  # draw the bar
-                pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width),
-                                 thickness)  # draw the bar
+                pygame.draw.rect(screen, bigRecColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new), 0)  # third direction bar
+                pygame.draw.rect(screen, bigRecEdgeColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new), Bigthickness)  # edges of the rectangle (third)
+                pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width), thickness)  # draw the bar
+                pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width), thickness)  # draw the bar
                 pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width))  # up bar
 
+                context = globals().copy()
+                context.update(locals())
+                
                 if currentClass == 1:
-                    screen.blit(IM_FLEXION_MET, (150, 150))
-                    pygame.draw.rect(screen, upGreen,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upGreen, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_FLEXION_MET, context)
                 elif currentClass == 2:
-                    screen.blit(IM_EXTENSION_MET, (150, 150))
-                    pygame.draw.rect(screen, upOrange,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upOrange, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_EXTENSION_MET, context)
                 elif currentClass == 3:
-                    screen.blit(IM_FLEXION_PHA, (150, 150))
-                    pygame.draw.rect(screen, upAqua,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upAqua, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_FLEXION_PHA, context)
                 elif currentClass == 4:
-                    screen.blit(IM_EXTENSION_PHA, (150, 150))
-                    pygame.draw.rect(screen, upPink,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upPink, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_EXTENSION_PHA, context)
                 elif currentClass == 5:
-                    screen.blit(IM_ADDUCTION_MET, (150, 150))
-                    pygame.draw.rect(screen, upRed,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upRed, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_ADDUCTION_MET, context)
                 elif currentClass == 6:
-                    screen.blit(IM_ABDUCTION_MET, (150, 150))
-                    pygame.draw.rect(screen, upyellow,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upyellow, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
-                # elif currentClass == 7:
-                #     screen.blit(IM_PRONATION, (150, 150))
-                #     pygame.draw.rect(screen, upAquamarine,
-                #                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                #                      0)  # Moving bar specs
-                #
-                #     pygame.draw.polygon(screen, upAquamarine, (point1UpArrow, point2UpArrow, point3UpArrow))
-                #     pygame.draw.rect(screen, arrowColor,
-                #                      (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                #                       Bigger_rectangle_height_new),
-                #                      0)  # fill bar with the class color
-                #     pygame.draw.rect(screen, bigRecEdgeColor,
-                #                      (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                #                       Bigger_rectangle_height_new),
-                #                      Bigthickness)  # mark the edge of the bar with original color
-                #
-                #     pygame.draw.rect(screen, bigRecEdgeColor,
-                #                      (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                #                       Bigger_rectangle_height_new),
-                #                      Bigthickness)  # Bigger edge mark
-                #
-                #     pygame.draw.circle(screen, arrowColor,
-                #                        (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                #                        int(bar_height * 0.8),
-                #                        0)  # draw a colored filled circle to show result
-                #     pygame.draw.circle(screen, bigRecEdgeColor,
-                #                        (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                #                        int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-                #
-                #     # Drawing arrow polygon
-                #     pygame.draw.rect(screen, white, (
-                #         centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                #         Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                #     pygame.draw.polygon(screen, white, (point1, point2, point3))
-                # elif currentClass == 8:
-                #     screen.blit(IM_SUPINATION, (150, 150))
-                #     pygame.draw.rect(screen, upBlueviolet,
-                #                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                #                      0)  # Moving bar specs
-                #
-                #     pygame.draw.polygon(screen, upBlueviolet, (point1UpArrow, point2UpArrow, point3UpArrow))
-                #     pygame.draw.rect(screen, arrowColor,
-                #                      (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                #                       Bigger_rectangle_height_new),
-                #                      0)  # fill bar with the class color
-                #     pygame.draw.rect(screen, bigRecEdgeColor,
-                #                      (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                #                       Bigger_rectangle_height_new),
-                #                      Bigthickness)  # mark the edge of the bar with original color
-                #
-                #     pygame.draw.rect(screen, bigRecEdgeColor,
-                #                      (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                #                       Bigger_rectangle_height_new),
-                #                      Bigthickness)  # Bigger edge mark
-                #
-                #     pygame.draw.circle(screen, arrowColor,
-                #                        (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                #                        int(bar_height * 0.8),
-                #                        0)  # draw a colored filled circle to show result
-                #     pygame.draw.circle(screen, bigRecEdgeColor,
-                #                        (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                #                        int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-                #
-                #     # Drawing arrow polygon
-                #     pygame.draw.rect(screen, white, (
-                #         centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                #         Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                #     pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_ABDUCTION_MET, context)
                 elif currentClass == 7:
-                    screen.blit(IM_POINTING, (150, 150))
-                    pygame.draw.rect(screen, upBrown,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upBrown, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_POINTING, context)
                 elif currentClass == 8:
-                    screen.blit(IM_FINGER_3, (150, 150))
-                    pygame.draw.rect(screen, upGoldenrod,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upGoldenrod, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_FINGER_3, context)
                 elif currentClass == 9:
-                    screen.blit(IM_FINGER_2, (150, 150))
-                    pygame.draw.rect(screen, uplightcoral,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, uplightcoral, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_FINGER_2, context)
                 elif currentClass == 10:
-                    screen.blit(IM_MIDDLE_FINGER, (150, 150))
-                    pygame.draw.rect(screen, upOlivedrab,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upOlivedrab, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_MIDDLE_FINGER, context)
                 elif currentClass == 11:
-                    screen.blit(IM_RING_FINGER, (150, 150))
-                    pygame.draw.rect(screen, upPeachpuff,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upPeachpuff, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
-                else:
-                    screen.blit(IM_PINKIE_FINGER, (150, 150))
-                    pygame.draw.rect(screen, upPink2,
-                                     (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                                     0)  # Moving bar specs
-
-                    pygame.draw.polygon(screen, upPink2, (point1UpArrow, point2UpArrow, point3UpArrow))
-                    pygame.draw.rect(screen, arrowColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     0)  # fill bar with the class color
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # mark the edge of the bar with original color
-
-                    pygame.draw.rect(screen, bigRecEdgeColor,
-                                     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                                      Bigger_rectangle_height_new),
-                                     Bigthickness)  # Bigger edge mark
-
-                    pygame.draw.circle(screen, arrowColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8),
-                                       0)  # draw a colored filled circle to show result
-                    pygame.draw.circle(screen, bigRecEdgeColor,
-                                       (int(centerOfScreen[0]), int(Bigger_rectangle_Y + bar_height / 2)),
-                                       int(bar_height * 0.8), Bigthickness)  # highlight the edge of the circle
-
-                    # Drawing arrow polygon
-                    pygame.draw.rect(screen, white, (
-                        centerOfScreen[0] - bar_height / 6, Bigger_rectangle_Y + bar_height / 2, 2 * bar_height / 6,
-                        Bigger_rectangle_height / 2), thickness)  # Arrow Specs  # Arrow Specs
-                    pygame.draw.polygon(screen, white, (point1, point2, point3))
+                    bleep_arrow(IM_RING_FINGER, context)
+                elif currentClass == 12:
+                    bleep_arrow(IM_PINKIE_FINGER, context)
 
                 pygame.display.update()
-
-                # COMENTAMOS ESTO
                 time.sleep(resultTime)
-
                 # sendTiD(1000)  # send Event CUE: 1000 to LOOP to indicate end of result view time
                 SendID(',2001')
                 break
@@ -1448,8 +663,10 @@ def SerialComunication():
     file.close()
 
 if __name__ == '__main__':
+    if EXIT_ON_SERIAL == True:
+        executor = ThreadPoolExecutor(max_workers=3)
 
-    executor = ThreadPoolExecutor(max_workers=3)
-
-    executor.submit(SerialComunication)
-    executor.submit(visualinterface)
+        executor.submit(SerialComunication)
+        executor.submit(visualinterface)
+    else:
+        visualinterface()

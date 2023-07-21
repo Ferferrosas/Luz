@@ -1,121 +1,114 @@
-
-print("Nombre del archivo")
-archivo = input()
-fileName = archivo + ".csv"
-
 import serial
 from serial import SerialException
 import sys
 import os
-dirP = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-# #print(dirP + '/4_ref_other')
-sys.path.append(dirP + '/z1_ref_other/0_lib')
-Complete_trial = 0
-
-
 import pygame
 import time
 
 import pyautogui
 import math
 
-
 from CONFIG import *
 from concurrent.futures import ThreadPoolExecutor
 
-VAR = 1
-FIN = 1
+dirP = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+sys.path.append(dirP + '/z1_ref_other/0_lib')
+Complete_trial = 0
+
+archivo  = input("Nombre del archivo: ")
+fileName = archivo + ".csv"
+
+VAR  = 1
+FIN  = 1
 TEMP = 0
 
 EXIT_ON_SERIAL = False
 
 arduino_port = "COM4"
-baud = 230400
+baud         = 230400
 
 screen = pyautogui.size()
 
-screen_width = screen[0]
-screen_height = screen[1]
-screen_width_o = screen[0]
+screen_width    = screen[0]
+screen_height   = screen[1]
+screen_width_o  = screen[0]
 screen_height_o = screen[1]
-scaling_factor = 1
+scaling_factor  = 1
 
 # Normalize everything to the size of the bar as determined below
-screen_width = int(screen_width / scaling_factor)
+screen_width  = int(screen_width / scaling_factor)
 screen_height = int(screen_height / scaling_factor)
-screen = pygame.display.set_mode((screen_width, screen_height))  # Setting up the screen size
-pygame.display.set_caption('Motor Imagery Experiment')
+screen        = pygame.display.set_mode((screen_width, screen_height))  # Setting up the screen size
 screen_height = min(screen_width, screen_height)
-screen_width = min(screen_height, screen_width)
+screen_width  = min(screen_height, screen_width)
 
-spaceToBeLeft = 2.5 * int(screen_width * 0.1)  # space to be left at the edges of the rectangle to fit the
-# images at the sides (2*original bar width)
+pygame.display.set_caption('Motor Imagery Experiment')
+
+spaceToBeLeft          = 2.5 * int(screen_width * 0.1) 
 Bigger_rectangle_width = screen_width - 2 * spaceToBeLeft
-bar_width = 0.5 * Bigger_rectangle_width
+bar_width              = 0.5 * Bigger_rectangle_width
 
 # Load flexion and extension images, scale them, and place them at the side of the rectangle
-flexion_image = pygame.image.load('flexion.png')
+flexion_image         = pygame.image.load('flexion.png')
 image_scaling_flexion = spaceToBeLeft / flexion_image.get_rect().size[0]
-flexion_image = pygame.transform.scale(flexion_image, (
-    int(spaceToBeLeft), int(flexion_image.get_rect().size[1] * image_scaling_flexion)))
+flexion_image         = pygame.transform.scale(flexion_image, (int(spaceToBeLeft), int(flexion_image.get_rect().size[1] * image_scaling_flexion)))
+
 (flexion_image_x, flexion_image_y) = (0, screen_height / 2 - flexion_image.get_rect().size[1] / 2)
-extension_image = pygame.image.load('extension.png')
+
+extension_image         = pygame.image.load('extension.png')
 image_scaling_extension = spaceToBeLeft / extension_image.get_rect().size[0]
-extension_image = pygame.transform.scale(extension_image, (
-    int(spaceToBeLeft), int(extension_image.get_rect().size[1] * image_scaling_extension)))
-(extension_image_x, extension_image_y) = (
-    screen_width - spaceToBeLeft, screen_height / 2 - extension_image.get_rect().size[1] / 2)
-# make the height of the bar consistent with the size of wrist in the images
-bar_height = int(flexion_image.get_rect().size[1] * 0.2086701)
+extension_image         = pygame.transform.scale(extension_image, (int(spaceToBeLeft), int(extension_image.get_rect().size[1] * image_scaling_extension)))
+
+(extension_image_x, extension_image_y) = (screen_width - spaceToBeLeft, screen_height / 2 - extension_image.get_rect().size[1] / 2)
+bar_height                             = int(flexion_image.get_rect().size[1] * 0.2086701)
 
 # setting the dimensions of the rectangle in which the bar moves right/left
 Bigger_rectangle_height = bar_height
-Bigger_rectangle_X = screen_width_o / 2 - Bigger_rectangle_width / 2
-Bigger_rectangle_Y = screen_height / 2 - bar_height / 2 + bar_height * 2
-Bigthickness = 3  # thickness of the edge lines for the rectangle and other shapes
+Bigger_rectangle_X      = screen_width_o / 2 - Bigger_rectangle_width / 2
+Bigger_rectangle_Y      = screen_height / 2 - bar_height / 2 + bar_height * 2
+Bigthickness            = 3  # thickness of the edge lines for the rectangle and other shapes
 
 # color setting
-black = (0, 0, 0)
+black           = (0, 0, 0)
 bigRecEdgeColor = (185, 188, 181)  # FES:(130,92,63) #
-bigRecColor = (46, 52, 54)  # FES:(198,160,131) #
-barColor = bigRecEdgeColor
-white = (229, 229, 229)
-yellow = (255, 255, 0)
-# rightRed = (203, 0, 0)
-# leftBlue = (52, 101, 163)
-upGreen = (0, 128, 0)
-upOrange = (219, 71, 0)
-upAqua = (0, 193, 179)
-upPink = (191, 0, 96)
-upRed = (170, 0, 0)
-upyellow = (255, 255, 0)
-upAquamarine = (127, 255, 212)
-upBlueviolet = (138, 43, 226)
-upBrown = (165, 42, 42)
-upGoldenrod = (218, 165, 32)
-uplightcoral = (240, 128, 128)
-upOlivedrab = (107, 142, 35)
-upPeachpuff = (255, 218, 185)
-upPink2 = (255, 192, 203)
+bigRecColor     = (46, 52, 54)  # FES:(198,160,131) #
+barColor        = bigRecEdgeColor
+white           = (229, 229, 229)
+yellow          = (255, 255, 0)
+# rightRed      = (203, 0, 0)
+# leftBlue      = (52, 101, 163)
+upGreen         = (0, 128, 0)
+upOrange        = (219, 71, 0)
+upAqua          = (0, 193, 179)
+upPink          = (191, 0, 96)
+upRed           = (170, 0, 0)
+upyellow        = (255, 255, 0)
+upAquamarine    = (127, 255, 212)
+upBlueviolet    = (138, 43, 226)
+upBrown         = (165, 42, 42)
+upGoldenrod     = (218, 165, 32)
+uplightcoral    = (240, 128, 128)
+upOlivedrab     = (107, 142, 35)
+upPeachpuff     = (255, 218, 185)
+upPink2         = (255, 192, 203)
 
 # Initial position of the bar in the middle of the rectangle:
-initial_x = screen_width - bar_width
-initial_y = Bigger_rectangle_Y
+initial_x      = screen_width - bar_width
+initial_y      = Bigger_rectangle_Y
 centerOfScreen = (screen_width_o / 2, screen_height / 2)
-initial_x_2 = centerOfScreen[0]
-thickness = 0
+initial_x_2    = centerOfScreen[0]
+thickness      = 0
 
 # time.sleep(5)
 # correct for cue arrows by increasing the width of the bar so it is aligned with the arrow as it reaches the end of
 # the task
 arrowMidShift = (bar_height / 2)
-bar_width = bar_width + arrowMidShift
-initial_x = initial_x - arrowMidShift / 2
+bar_width     = bar_width + arrowMidShift
+initial_x     = initial_x - arrowMidShift / 2
 
 # new rectangle dimensions
-Bigger_rectangle_new_X = (Bigger_rectangle_X + (Bigger_rectangle_width / 2)) - (Bigger_rectangle_height / 2)
-Bigger_rectangle_new_Y = (Bigger_rectangle_Y + Bigger_rectangle_height) - (Bigger_rectangle_width / 2
-                                                                           + Bigger_rectangle_height / 2)
+Bigger_rectangle_new_X      = (Bigger_rectangle_X + (Bigger_rectangle_width / 2)) - (Bigger_rectangle_height / 2)
+Bigger_rectangle_new_Y      = (Bigger_rectangle_Y + Bigger_rectangle_height) - (Bigger_rectangle_width / 2 + Bigger_rectangle_height / 2)
 Bigger_rectangle_height_new = Bigger_rectangle_width / 2 + Bigger_rectangle_height / 2
 
 # new 'down' rectangle dimensions (not used here)
@@ -124,57 +117,54 @@ Down_rectangle_Y = Bigger_rectangle_new_Y + (Bigger_rectangle_height_new - Bigge
 
 # new bar
 bar_height_new = Bigger_rectangle_height
-bar_width_new = bar_height
-initial_y_new = Bigger_rectangle_new_Y + (Bigger_rectangle_height_new / 2)
-initial_x_new = Bigger_rectangle_new_X
+bar_width_new  = bar_height
+initial_y_new  = Bigger_rectangle_new_Y + (Bigger_rectangle_height_new / 2)
+initial_x_new  = Bigger_rectangle_new_X
 
 ######## Arrow dimensions goes here
-ArrowTipWidth = bar_width / 3.5
+ArrowTipWidth        = bar_width / 3.5
 ArrowRectangleHeight = Bigger_rectangle_height
-ArrowRectangleWidth = 0.5 * ArrowTipWidth
+ArrowRectangleWidth  = 0.5 * ArrowTipWidth
 
-upArrowStartingX = Bigger_rectangle_new_X
-upArrowStartingY = Bigger_rectangle_new_Y - ArrowRectangleWidth
+upArrowStartingX       = Bigger_rectangle_new_X
+upArrowStartingY       = Bigger_rectangle_new_Y - ArrowRectangleWidth
 upArrowRectangleHeight = ArrowRectangleWidth
-upArrowRectangleWidth = ArrowRectangleHeight
+upArrowRectangleWidth  = ArrowRectangleHeight
 
 point1UpArrow = (centerOfScreen[0], upArrowStartingY - ArrowTipWidth)
 point2UpArrow = (centerOfScreen[0] - ArrowTipWidth / math.sqrt(3), upArrowStartingY)
 point3UpArrow = (centerOfScreen[0] + ArrowTipWidth / math.sqrt(3),upArrowStartingY)
 
-# adjustment to bar_width for drawing the bars
-bar_width = Bigger_rectangle_height
-
-# changes in horizontal rectangle to create two rectangles
+bar_width                  = Bigger_rectangle_height
 Bigger_rectangle_width_adj = Bigger_rectangle_width / 2 + bar_width / 2
-Bigger_rectangle_X_adj = Bigger_rectangle_X + (Bigger_rectangle_width / 2 - bar_width / 2)
+Bigger_rectangle_X_adj     = Bigger_rectangle_X + (Bigger_rectangle_width / 2 - bar_width / 2)
 
-IM_FLEXION_MET = pygame.image.load("neu1.jfif").convert()
-IM_FLEXION_MET = pygame.transform.scale(IM_FLEXION_MET, (624, 577))
+IM_FLEXION_MET   = pygame.image.load("neu1.jfif").convert()
+IM_FLEXION_MET   = pygame.transform.scale(IM_FLEXION_MET, (624, 577))
 IM_EXTENSION_MET = pygame.image.load("neu2.jfif").convert()
 IM_EXTENSION_MET = pygame.transform.scale(IM_EXTENSION_MET, (624, 619.19))
-IM_FLEXION_PHA = pygame.image.load("neu7.jfif").convert()
-IM_FLEXION_PHA = pygame.transform.scale(IM_FLEXION_PHA, (624, 636.70))
+IM_FLEXION_PHA   = pygame.image.load("neu7.jfif").convert()
+IM_FLEXION_PHA   = pygame.transform.scale(IM_FLEXION_PHA, (624, 636.70))
 IM_EXTENSION_PHA = pygame.image.load("neu8.jfif").convert()
 IM_EXTENSION_PHA = pygame.transform.scale(IM_EXTENSION_PHA, (624, 636.70))
 IM_ADDUCTION_MET = pygame.image.load("neu6.jfif").convert()
 IM_ADDUCTION_MET = pygame.transform.scale(IM_ADDUCTION_MET, (624, 590.60))
 IM_ABDUCTION_MET = pygame.image.load("neu5.jfif").convert()
 IM_ABDUCTION_MET = pygame.transform.scale(IM_ABDUCTION_MET, (624, 577))
-# IM_PRONATION = pygame.image.load("neu7.jfif").convert()
-# IM_PRONATION = pygame.transform.scale(IM_PRONATION, (624, 577))
-# IM_SUPINATION = pygame.image.load("neu8.jfif").convert()
-# IM_SUPINATION = pygame.transform.scale(IM_SUPINATION, (624, 577))
-IM_POINTING = pygame.image.load("neu9.jfif").convert()
-IM_POINTING = pygame.transform.scale(IM_POINTING, (624, 577))
-IM_FINGER_3 = pygame.image.load("neu10.jfif").convert()
-IM_FINGER_3 = pygame.transform.scale(IM_FINGER_3, (624, 577))
-IM_FINGER_2 = pygame.image.load("neu11.jfif").convert()
-IM_FINGER_2 = pygame.transform.scale(IM_FINGER_2, (624, 577))
+# IM_PRONATION   = pygame.image.load("neu7.jfif").convert()
+# IM_PRONATION   = pygame.transform.scale(IM_PRONATION, (624, 577))
+# IM_SUPINATION  = pygame.image.load("neu8.jfif").convert()
+# IM_SUPINATION  = pygame.transform.scale(IM_SUPINATION, (624, 577))
+IM_POINTING      = pygame.image.load("neu9.jfif").convert()
+IM_POINTING      = pygame.transform.scale(IM_POINTING, (624, 577))
+IM_FINGER_3      = pygame.image.load("neu10.jfif").convert()
+IM_FINGER_3      = pygame.transform.scale(IM_FINGER_3, (624, 577))
+IM_FINGER_2      = pygame.image.load("neu11.jfif").convert()
+IM_FINGER_2      = pygame.transform.scale(IM_FINGER_2, (624, 577))
 IM_MIDDLE_FINGER = pygame.image.load("neu12.jfif").convert()
 IM_MIDDLE_FINGER = pygame.transform.scale(IM_MIDDLE_FINGER, (624, 577))
-IM_RING_FINGER = pygame.image.load("neu13.jfif").convert()
-IM_RING_FINGER = pygame.transform.scale(IM_RING_FINGER, (624, 577))
+IM_RING_FINGER   = pygame.image.load("neu13.jfif").convert()
+IM_RING_FINGER   = pygame.transform.scale(IM_RING_FINGER, (624, 577))
 IM_PINKIE_FINGER = pygame.image.load("neu14.jfif").convert()
 IM_PINKIE_FINGER = pygame.transform.scale(IM_PINKIE_FINGER, (624, 577))
 
@@ -187,13 +177,8 @@ IM_PINKIE_FINGER = pygame.transform.scale(IM_PINKIE_FINGER, (624, 577))
 ######## RUN STARTS HERE #########
 ##################################
 def visualinterface():
-
-# pygame.display.update()
     time.sleep(ExperimentConfigureTime)  # display the interface for a certain period that is set in the i0_configFile.py file
-
     screen.fill(black)
-
-    #prevTime = time.time()  # record time at beginning of the trial
 
     arrowColor = white
 

@@ -24,8 +24,10 @@ from CONFIG import *
 from concurrent.futures import ThreadPoolExecutor
 
 VAR = 1
-FIN = 0
+FIN = 1
 TEMP = 0
+
+EXIT_ON_SERIAL = False
 
 arduino_port = "COM4"
 baud = 230400
@@ -201,19 +203,19 @@ def visualinterface():
         if currentClass == 1:
             arrowColor = upGreen
 
-        if currentClass == 2:
+        elif currentClass == 2:
             arrowColor = upOrange
 
-        if currentClass == 3:
+        elif currentClass == 3:
             arrowColor = upAqua
 
-        if currentClass == 4:
+        elif currentClass == 4:
             arrowColor = upPink
 
-        if currentClass == 5:
+        elif currentClass == 5:
             arrowColor = upRed
 
-        if currentClass == 6:
+        elif currentClass == 6:
             arrowColor = upyellow
 
         # if currentClass == 7:
@@ -222,22 +224,22 @@ def visualinterface():
         # if currentClass == 8:
         #     arrowColor = upBlueviolet
 
-        if currentClass == 7:
+        elif currentClass == 7:
             arrowColor = upBrown
 
-        if currentClass == 8:
+        elif currentClass == 8:
             arrowColor = upGoldenrod
 
-        if currentClass == 9:
+        elif currentClass == 9:
             arrowColor = uplightcoral
 
-        if currentClass == 10:
+        elif currentClass == 10:
             arrowColor = upOlivedrab
 
-        if currentClass == 11:
+        elif currentClass == 11:
             arrowColor = upPeachpuff
 
-        if currentClass == 12:
+        elif currentClass == 12:
             arrowColor = upPink2
 
         print('Class of current trial: ', currentClass)
@@ -248,30 +250,30 @@ def visualinterface():
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upGreen, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 2:
+        elif currentClass == 2:
             pygame.draw.rect(screen, upOrange,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upOrange, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 3:
+        elif currentClass == 3:
             pygame.draw.rect(screen, upAqua,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upAqua, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 4:
+        elif currentClass == 4:
             pygame.draw.rect(screen, upPink,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upPink, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 5:
+        elif currentClass == 5:
             pygame.draw.rect(screen, upRed,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upRed, (point1UpArrow, point2UpArrow, point3UpArrow))
-        if currentClass == 6:
+        elif currentClass == 6:
             pygame.draw.rect(screen, upyellow,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
@@ -289,37 +291,37 @@ def visualinterface():
         #                      0)  # Moving bar specs
         #     pygame.draw.polygon(screen, upBlueviolet, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 7:
+        elif currentClass == 7:
             pygame.draw.rect(screen, upBrown,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upBrown, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 8:
+        elif currentClass == 8:
             pygame.draw.rect(screen, upGoldenrod,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upGoldenrod, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 9:
+        elif currentClass == 9:
             pygame.draw.rect(screen, uplightcoral,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, uplightcoral, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 10:
+        elif currentClass == 10:
             pygame.draw.rect(screen, upOlivedrab,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upOlivedrab, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 11:
+        elif currentClass == 11:
             pygame.draw.rect(screen, upPeachpuff,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
             pygame.draw.polygon(screen, upPeachpuff, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        if currentClass == 12:
+        elif currentClass == 12:
             pygame.draw.rect(screen, upPink2,
                              (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                              0)  # Moving bar specs
@@ -468,18 +470,18 @@ def visualinterface():
         if currentClass == 1:
             SendID(',300')
         #        SendID(',769')  # send Event CUE: 769 to LOOP to indicate flexion cue
-        if currentClass == 2:
+        elif currentClass == 2:
             SendID(',400')
         #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
-        if currentClass == 3:
+        elif currentClass == 3:
             SendID(',500')
-        if currentClass == 4:
+        elif currentClass == 4:
             SendID(',600')
         #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
-        if currentClass == 5:
+        elif currentClass == 5:
             SendID(',700')
         #        SendID(',771')
-        if currentClass == 6:
+        elif currentClass == 6:
             SendID(',800')
         # if currentClass == 7:
         #     SendID(',900')
@@ -487,20 +489,20 @@ def visualinterface():
         # if currentClass == 8:
         #     SendID(',1000')
         #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
-        if currentClass == 7:
+        elif currentClass == 7:
             SendID(',1100')
-        if currentClass == 8:
+        elif currentClass == 8:
             SendID(',1200')
         #        SendID(',770') # send Event CUE: 770 to LOOP to indicate extension cue
-        if currentClass == 9:
+        elif currentClass == 9:
             SendID(',1300')
         #        SendID(',771')
-        if currentClass == 10:
+        elif currentClass == 10:
             SendID(',1400')
-        if currentClass == 11:
+        elif currentClass == 11:
             SendID(',1500')
         #        SendID(',771')
-        if currentClass == 12:
+        elif currentClass == 12:
             SendID(',1600')
 
         time.sleep(cueTime)  # wait for the period determined in a0_configFile.py
@@ -656,35 +658,35 @@ def visualinterface():
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upGreen, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 2:
+                elif currentClass == 2:
                     screen.blit(IM_EXTENSION_MET, (150, 150))
                     pygame.draw.rect(screen, upOrange,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upOrange, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 3:
+                elif currentClass == 3:
                     screen.blit(IM_FLEXION_PHA, (150, 150))
                     pygame.draw.rect(screen, upAqua,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upAqua, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 4:
+                elif currentClass == 4:
                     screen.blit(IM_EXTENSION_PHA, (150, 150))
                     pygame.draw.rect(screen, upPink,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upPink, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 5:
+                elif currentClass == 5:
                     screen.blit(IM_ADDUCTION_MET, (150, 150))
                     pygame.draw.rect(screen, upRed,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upRed, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 6:
+                elif currentClass == 6:
                     screen.blit(IM_ABDUCTION_MET, (150, 150))
                     pygame.draw.rect(screen, upyellow,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
@@ -705,42 +707,42 @@ def visualinterface():
                 #                      0)  # Moving bar specs
                 #     pygame.draw.polygon(screen, upBlueviolet, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 7:
+                elif currentClass == 7:
                     screen.blit(IM_POINTING, (150, 150))
                     pygame.draw.rect(screen, upBrown,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upBrown, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 8:
+                elif currentClass == 8:
                     screen.blit(IM_FINGER_3, (150, 150))
                     pygame.draw.rect(screen, upGoldenrod,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upGoldenrod, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 9:
+                elif currentClass == 9:
                     screen.blit(IM_FINGER_2, (150, 150))
                     pygame.draw.rect(screen, uplightcoral,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, uplightcoral, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 10:
+                elif currentClass == 10:
                     screen.blit(IM_MIDDLE_FINGER, (150, 150))
                     pygame.draw.rect(screen, upOlivedrab,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upOlivedrab, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 11:
+                elif currentClass == 11:
                     screen.blit(IM_RING_FINGER, (150, 150))
                     pygame.draw.rect(screen, upPeachpuff,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
                                      0)  # Moving bar specs
                     pygame.draw.polygon(screen, upPeachpuff, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-                if currentClass == 12:
+                elif currentClass == 12:
                     screen.blit(IM_PINKIE_FINGER, (150, 150))
                     pygame.draw.rect(screen, upPink2,
                                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
@@ -1401,20 +1403,27 @@ def SerialComunication():
 
     global TEMP
     global FIN
+    global EXIT_ON_SERIAL
 
     try:
         ser = serial.Serial(arduino_port, baud)
         FIN = 0
     except SerialException:
         print("¡¡ERROR COMMUNICATION SERIAL!!")
-        FIN = 1
-        sys.exit()
+        FIN = 0 # Changed to 0 so it does not stop
+        if EXIT_ON_SERIAL:
+            sys.exit()
+            
     #ser = serial.Serial(arduino_port, baud)
     print("Connected to Arduino port:" + arduino_port)
     print("Created file")
 
     # display the data to the terminal
-    getData = str(ser.readline())
+    if EXIT_ON_SERIAL:
+        getData = str(ser.readline())
+    else:
+        getData = str([0,0,0])
+
     data = getData[2:][:-6] + TEMP
     TEMP = ',0'
     print(data)
@@ -1436,7 +1445,12 @@ def SerialComunication():
                 print("Printing Column Headers")
             else:
                 print("Line " + str(line) + ": writing...")
-        getData = str(ser.readline())
+        
+        if EXIT_ON_SERIAL:
+            getData = str(ser.readline())
+        else:
+            getData = str([0,0,0])
+            
         data = getData[2:][:-5] + TEMP
         TEMP = ',0'
         print(data)

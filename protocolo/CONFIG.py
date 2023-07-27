@@ -16,9 +16,9 @@ resultTime=1
 restTime= 2
 #fixationTime = 1
 
-n = 0
+n = 1
 
-n_flexion_met = 3
+n_flexion_met = n
 n_extension_met = n
 n_flexion_pha = n
 n_extension_pha = n

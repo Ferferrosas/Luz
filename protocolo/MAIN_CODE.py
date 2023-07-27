@@ -184,134 +184,15 @@ def visualinterface():
     arrowColor = white
 
     for trial in all_arrays:  # trial = +1 (extension)/-1(flexion)
-
+        class_to_color = {1: upGreen, 2: upOrange, 3: upAqua, 4: upPink, 5: upRed, 6: upyellow, 7: upBrown, 8: upGoldenrod, 9: uplightcoral, 10: upOlivedrab, 11: upPeachpuff, 12: upPink2}
         currentClass = trial
-        if currentClass == 1:
-            arrowColor = upGreen
-
-        elif currentClass == 2:
-            arrowColor = upOrange
-
-        elif currentClass == 3:
-            arrowColor = upAqua
-
-        elif currentClass == 4:
-            arrowColor = upPink
-
-        elif currentClass == 5:
-            arrowColor = upRed
-
-        elif currentClass == 6:
-            arrowColor = upyellow
-
-        # if currentClass == 7:
-        #     arrowColor = upAquamarine
-        #
-        # if currentClass == 8:
-        #     arrowColor = upBlueviolet
-
-        elif currentClass == 7:
-            arrowColor = upBrown
-
-        elif currentClass == 8:
-            arrowColor = upGoldenrod
-
-        elif currentClass == 9:
-            arrowColor = uplightcoral
-
-        elif currentClass == 10:
-            arrowColor = upOlivedrab
-
-        elif currentClass == 11:
-            arrowColor = upPeachpuff
-
-        elif currentClass == 12:
-            arrowColor = upPink2
+        arrowColor = class_to_color.get(currentClass)
 
         print('Class of current trial: ', currentClass)
-
-        if currentClass == 1:
-            pygame.draw.rect(screen, upGreen,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upGreen, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 2:
-            pygame.draw.rect(screen, upOrange,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upOrange, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 3:
-            pygame.draw.rect(screen, upAqua,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upAqua, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 4:
-            pygame.draw.rect(screen, upPink,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upPink, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 5:
-            pygame.draw.rect(screen, upRed,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upRed, (point1UpArrow, point2UpArrow, point3UpArrow))
-        elif currentClass == 6:
-            pygame.draw.rect(screen, upyellow,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upyellow, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        # if currentClass == 7:
-        #     pygame.draw.rect(screen, upAquamarine,
-        #                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-        #                      0)  # Moving bar specs
-        #     pygame.draw.polygon(screen, upAquamarine, (point1UpArrow, point2UpArrow, point3UpArrow))
-        #
-        # if currentClass == 8:
-        #     pygame.draw.rect(screen, upBlueviolet,
-        #                      (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-        #                      0)  # Moving bar specs
-        #     pygame.draw.polygon(screen, upBlueviolet, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 7:
-            pygame.draw.rect(screen, upBrown,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upBrown, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 8:
-            pygame.draw.rect(screen, upGoldenrod,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upGoldenrod, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 9:
-            pygame.draw.rect(screen, uplightcoral,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, uplightcoral, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 10:
-            pygame.draw.rect(screen, upOlivedrab,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upOlivedrab, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 11:
-            pygame.draw.rect(screen, upPeachpuff,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upPeachpuff, (point1UpArrow, point2UpArrow, point3UpArrow))
-
-        elif currentClass == 12:
-            pygame.draw.rect(screen, upPink2,
-                             (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight),
-                             0)  # Moving bar specs
-            pygame.draw.polygon(screen, upPink2, (point1UpArrow, point2UpArrow, point3UpArrow))
+        
+        color_value = class_to_color.get(currentClass)
+        pygame.draw.rect(screen, color_value, (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight), 0)
+        pygame.draw.polygon(screen, color_value, (point1UpArrow, point2UpArrow, point3UpArrow))
 
         SendID(',2000')
         if FIN == 1 and EXIT_ON_SERIAL == True:
@@ -332,31 +213,20 @@ def visualinterface():
         
         context = globals().copy()
         context.update(locals())
-
-        if currentClass   == 1:
-            draw_image_with_arrow(IM_EXTENSION_MET  , context)
-        elif currentClass == 2:
-            draw_image_with_arrow(IM_FLEXION_MET    , context)
-        elif currentClass == 3:
-            draw_image_with_arrow(IM_FLEXION_PHA    , context)
-        elif currentClass == 3:
-            draw_image_with_arrow(IM_EXTENSION_PHA  , context)
-        elif currentClass == 5:
-            draw_image_with_arrow(IM_ABDUCTION_MET  , context)
-        elif currentClass == 6:
-            draw_image_with_arrow(IM_ABDUCTION_MET  , context)
-        elif currentClass == 7:
-            draw_image_with_arrow(IM_POINTING       , context)
-        elif currentClass == 8:
-            draw_image_with_arrow(IM_FINGER_3       , context)
-        elif currentClass == 9:
-            draw_image_with_arrow(IM_FINGER_2       , context)
-        elif currentClass == 10:
-            draw_image_with_arrow(IM_MIDDLE_FINGER  , context)
-        elif currentClass == 11:
-            draw_image_with_arrow(IM_RING_FINGER    , context)
-        else:
-            draw_image_with_arrow(IM_PINKIE_FINGER  , context)
+        f_image_selection = {
+            1:  lambda: draw_image_with_arrow(IM_EXTENSION_MET, context),
+            2:  lambda: draw_image_with_arrow(IM_FLEXION_MET, context),
+            3:  lambda: draw_image_with_arrow(IM_FLEXION_PHA, context),
+            4:  lambda: draw_image_with_arrow(IM_EXTENSION_PHA, context),
+            5:  lambda: draw_image_with_arrow(IM_ABDUCTION_MET, context),
+            6:  lambda: draw_image_with_arrow(IM_ABDUCTION_MET, context),
+            7:  lambda: draw_image_with_arrow(IM_POINTING, context),
+            8:  lambda: draw_image_with_arrow(IM_FINGER_3, context),
+            9:  lambda: draw_image_with_arrow(IM_FINGER_2, context),
+            10: lambda: draw_image_with_arrow(IM_MIDDLE_FINGER, context),
+            11: lambda: draw_image_with_arrow(IM_RING_FINGER, context),
+        }
+        f_image_selection.get(currentClass)()
 
         pygame.draw.polygon(screen, arrowColor, (point1, point2, point3))
         pygame.display.update()
@@ -392,80 +262,66 @@ def visualinterface():
 
         prevTime = time.time()
         task_cue = 0
-        if currentClass == 1 and task_cue == 0:
-            SendID(',301')
-            if FIN == 1 and EXIT_ON_SERIAL == True:
-                sys.exit()
-        elif currentClass == 2 and task_cue == 0:
-            SendID(',401')
-            if FIN == 1:
-                sys.exit()
-        elif currentClass == 3 and task_cue == 0:
-            SendID(',501')
-            if FIN == 1:
-                sys.exit()
-        elif currentClass == 4 and task_cue == 0:
-            SendID(',601')
-            if FIN == 1:
-                sys.exit()
-        #        sendTiD(7701)  # send Event CUE: 7701 to LOOP to indicate start of extension task
-        # task_cue = 1  # send this cue only once at the beginning of the task
-        elif currentClass == 5 and task_cue == 0:
-            SendID(',701')
-            if FIN == 1:
-                sys.exit()
-        #        sendTiD(7711)
-        elif currentClass == 6 and task_cue == 0:
-            SendID(',801')
-            if FIN == 1:
-                sys.exit()
-        # task_cue = 1
-        # elif currentClass == 7 and task_cue == 0:
-        #     SendID(',901')
-        #     if FIN == 1:
-        #         sys.exit()
-        # #        sendTiD(7701)  # send Event CUE: 7701 to LOOP to indicate start of extension task
-        # # task_cue = 1  # send this cue only once at the beginning of the task
-        # elif currentClass == 8 and task_cue == 0:
-        #     SendID(',1001')
-        #     if FIN == 1:
-        #         sys.exit()
-        elif currentClass == 7 and task_cue == 0:
-            SendID(',1101')
-            if FIN == 1:
-                sys.exit()
-        #        sendTiD(7701)  # send Event CUE: 7701 to LOOP to indicate start of extension task
-        # task_cue = 1  # send this cue only once at the beginning of the task
-        elif currentClass == 8 and task_cue == 0:
-            SendID(',1201')
-            if FIN == 1:
-                sys.exit()
-        #        sendTiD(7711)
-        elif currentClass == 9 and task_cue == 0:
-            SendID(',1301')
-            if FIN == 1:
-                sys.exit()
-        elif currentClass == 10 and task_cue == 0:
-            SendID(',1401')
-            if FIN == 1:
-                sys.exit()
-        #        sendTiD(7711)
-        elif currentClass == 11 and task_cue == 0:
-            SendID(',1501')
-            if FIN == 1:
-                sys.exit()
-        elif currentClass == 12 and task_cue == 0:
-            SendID(',1601')
-            if FIN == 1:
-                sys.exit()
+        if EXIT_ON_SERIAL:
+            if currentClass == 1 and task_cue == 0:
+                SendID(',301')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 2 and task_cue == 0:
+                SendID(',401')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 3 and task_cue == 0:
+                SendID(',501')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 4 and task_cue == 0:
+                SendID(',601')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 5 and task_cue == 0:
+                SendID(',701')
+                if FIN == 1:
+                    sys.exit()
+            #        sendTiD(7711)
+            elif currentClass == 6 and task_cue == 0:
+                SendID(',801')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 7 and task_cue == 0:
+                SendID(',1101')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 8 and task_cue == 0:
+                SendID(',1201')
+                if FIN == 1:
+                    sys.exit()
+            #        sendTiD(7711)
+            elif currentClass == 9 and task_cue == 0:
+                SendID(',1301')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 10 and task_cue == 0:
+                SendID(',1401')
+                if FIN == 1:
+                    sys.exit()
+            #        sendTiD(7711)
+            elif currentClass == 11 and task_cue == 0:
+                SendID(',1501')
+                if FIN == 1:
+                    sys.exit()
+            elif currentClass == 12 and task_cue == 0:
+                SendID(',1601')
+                if FIN == 1:
+                    sys.exit()
 
         fflag = 1
 
         context = globals().copy()
         context.update(locals())
 
+        print("Entering main loop")
         while True:
-
             step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
             y_bar = Bigger_rectangle_Y - step_size
             delta_height_2 = bar_width + step_size
@@ -473,50 +329,44 @@ def visualinterface():
             # re-draw the interface
             if fflag:
                 class_to_color_image = {
-                    1:  (upGreen, IM_FLEXION_MET),
-                    2:  (upOrange, IM_EXTENSION_MET),
-                    3:  (upAqua, IM_FLEXION_PHA),
-                    4:  (upPink, IM_EXTENSION_PHA),
-                    5:  (upRed, IM_ADDUCTION_MET),
-                    6:  (upyellow, IM_ABDUCTION_MET),
-                    7:  (upBrown, IM_POINTING),
+                    1:  (upGreen,     IM_FLEXION_MET),
+                    2:  (upOrange,    IM_EXTENSION_MET),
+                    3:  (upAqua,      IM_FLEXION_PHA),
+                    4:  (upPink,      IM_EXTENSION_PHA),
+                    5:  (upRed,       IM_ADDUCTION_MET),
+                    6:  (upyellow,    IM_ABDUCTION_MET),
+                    7:  (upBrown,     IM_POINTING),
                     8:  (upGoldenrod, IM_FINGER_3),
-                    9:  (uplightcoral, IM_FINGER_2),
+                    9:  (uplightcoral,IM_FINGER_2),
                     10: (upOlivedrab, IM_MIDDLE_FINGER),
                     11: (upPeachpuff, IM_RING_FINGER),
-                    12: (upPink2, IM_PINKIE_FINGER)
+                    12: (upPink2,     IM_PINKIE_FINGER)
                 }
                 
                 color, image = class_to_color_image.get(currentClass, (None, None))
                 context      = globals().copy()
                 context.update(locals())
                 draw_image_with_arrow_ff(color,image,context)
-
                 fflag = 0
 
-            pygame.draw.rect(screen, bigRecColor,
-                             (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                              Bigger_rectangle_height_new), 0)  # third direction bar
-            pygame.draw.rect(screen, bigRecEdgeColor,
-                             (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,
-                              Bigger_rectangle_height_new),
-                             Bigthickness)  # edges of the rectangle (third)
+            pygame.draw.rect(screen, bigRecColor,     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new), 0)  # third direction bar
+            pygame.draw.rect(screen, bigRecEdgeColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new), Bigthickness)  # edges of the rectangle (third)
+            pygame.draw.rect(screen, barColor,        (initial_x_new, y_bar, bar_width, delta_height_2))  # draw up bar
 
-            pygame.draw.rect(screen, barColor, (initial_x_new, y_bar, bar_width, delta_height_2))  # draw up bar
 
             context = globals().copy()
             context.update(locals())
 
             class_to_image = {
-                1: IM_FLEXION_MET,
-                2: IM_EXTENSION_MET,
-                3: IM_FLEXION_PHA,
-                4: IM_EXTENSION_PHA,
-                5: IM_ADDUCTION_MET,
-                6: IM_ABDUCTION_MET,
-                7: IM_POINTING,
-                8: IM_FINGER_3,
-                9: IM_FINGER_2,
+                1:  IM_FLEXION_MET,
+                2:  IM_EXTENSION_MET,
+                3:  IM_FLEXION_PHA,
+                4:  IM_EXTENSION_PHA,
+                5:  IM_ADDUCTION_MET,
+                6:  IM_ABDUCTION_MET,
+                7:  IM_POINTING,
+                8:  IM_FINGER_3,
+                9:  IM_FINGER_2,
                 10: IM_MIDDLE_FINGER,
                 11: IM_RING_FINGER,
                 12: IM_PINKIE_FINGER
@@ -524,12 +374,11 @@ def visualinterface():
 
             image = class_to_image[currentClass]
             draw_task_image(image, context)
-          
 
             pygame.draw.polygon(screen, arrowColor, (point1, point2, point3))
             pygame.display.update()
 
-        # Stopping criteria based on taskTime that is set in a0_configFile.py
+            # Stopping criteria based on taskTime that is set in a0_configFile.py
             if (time.time() - prevTime >= taskTime):
                 class_to_send_id = {1: ',302', 2: ',402', 3: ',502', 4: ',602', 5: ',702', 6: ',802', 9: ',1102', 10: ',1202', 11: ',1302', 12: ',1402', 13: ',1502', 14: ',1602'}
                 
@@ -545,34 +394,23 @@ def visualinterface():
                 context = globals().copy()
                 context.update(locals())
                 
-                if currentClass == 1:
-                    bleep_arrow(IM_FLEXION_MET, context)
-                elif currentClass == 2:
-                    bleep_arrow(IM_EXTENSION_MET, context)
-                elif currentClass == 3:
-                    bleep_arrow(IM_FLEXION_PHA, context)
-                elif currentClass == 4:
-                    bleep_arrow(IM_EXTENSION_PHA, context)
-                elif currentClass == 5:
-                    bleep_arrow(IM_ADDUCTION_MET, context)
-                elif currentClass == 6:
-                    bleep_arrow(IM_ABDUCTION_MET, context)
-                elif currentClass == 7:
-                    bleep_arrow(IM_POINTING, context)
-                elif currentClass == 8:
-                    bleep_arrow(IM_FINGER_3, context)
-                elif currentClass == 9:
-                    bleep_arrow(IM_FINGER_2, context)
-                elif currentClass == 10:
-                    bleep_arrow(IM_MIDDLE_FINGER, context)
-                elif currentClass == 11:
-                    bleep_arrow(IM_RING_FINGER, context)
-                elif currentClass == 12:
-                    bleep_arrow(IM_PINKIE_FINGER, context)
-
+                f_bleep = {
+                    1: lambda:  bleep_arrow(IM_FLEXION_MET, context),
+                    2: lambda:  bleep_arrow(IM_EXTENSION_MET, context),
+                    3: lambda:  bleep_arrow(IM_FLEXION_PHA, context),
+                    4: lambda:  bleep_arrow(IM_EXTENSION_PHA, context),
+                    5: lambda:  bleep_arrow(IM_ADDUCTION_MET, context),
+                    6: lambda:  bleep_arrow(IM_ABDUCTION_MET, context),
+                    7: lambda:  bleep_arrow(IM_POINTING, context),
+                    8: lambda:  bleep_arrow(IM_FINGER_3, context),
+                    9: lambda:  bleep_arrow(IM_FINGER_2, context),
+                    10: lambda: bleep_arrow(IM_MIDDLE_FINGER, context),
+                    11: lambda: bleep_arrow(IM_RING_FINGER, context),
+                    12: lambda: bleep_arrow(IM_PINKIE_FINGER, context)
+                }
+                f_bleep.get(currentClass)()
                 pygame.display.update()
                 time.sleep(resultTime)
-                # sendTiD(1000)  # send Event CUE: 1000 to LOOP to indicate end of result view time
                 SendID(',2001')
                 break
 

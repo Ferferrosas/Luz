@@ -391,8 +391,6 @@ def visualinterface():
                 pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width), thickness)  # draw the bar
                 pygame.draw.rect(screen, barColor, (initial_x_new, initial_y, bar_width, bar_width))  # up bar
 
-                context = globals().copy()
-                context.update(locals())
                 
                 f_bleep = {
                     1: lambda:  bleep_arrow(IM_FLEXION_MET, context),
@@ -408,8 +406,17 @@ def visualinterface():
                     11: lambda: bleep_arrow(IM_RING_FINGER, context),
                     12: lambda: bleep_arrow(IM_PINKIE_FINGER, context)
                 }
+
+                context = globals().copy()
+                context.update(locals())
                 f_bleep.get(currentClass)()
+
+                # Trigger here the animation
+                # ANIMATION START ################
+                
+                # ANIMATION STOP  ################
                 pygame.display.update()
+
                 time.sleep(resultTime)
                 SendID(',2001')
                 break
@@ -503,7 +510,6 @@ def SerialComunication():
 if __name__ == '__main__':
     if EXIT_ON_SERIAL == True:
         executor = ThreadPoolExecutor(max_workers=3)
-
         executor.submit(SerialComunication)
         executor.submit(visualinterface)
     else:

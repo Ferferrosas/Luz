@@ -5,17 +5,17 @@ import os
 import pygame
 import time
 from utils import *
-
 import pyautogui
 import math
 
+from LEADERBOARD import *
 from CONFIG import *
 from concurrent.futures import ThreadPoolExecutor
 
 dirP = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 sys.path.append(dirP + '/z1_ref_other/0_lib')
 Complete_trial = 0
-
+leaderboard = Leaderboard()
 archivo  = input("Nombre del archivo: ")
 fileName = archivo + ".csv"
 
@@ -28,6 +28,7 @@ EXIT_ON_SERIAL = False
 arduino_port = "COM4"
 baud         = 230400
 
+pygame.init()
 screen = pyautogui.size()
 
 screen_width    = screen[0]
@@ -413,7 +414,10 @@ def visualinterface():
 
                 # Trigger here the animation
                 # ANIMATION START ################
-                
+                leaderboard.draw_table(screen,currentClass)
+                reactionTime = random.randrange(0,10000,1)/1000
+                leaderboard.greet(screen,currentClass,reactionTime)
+                leaderboard.push_score(currentClass, reactionTime)
                 # ANIMATION STOP  ################
                 pygame.display.update()
 

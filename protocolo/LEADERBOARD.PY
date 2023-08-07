@@ -56,15 +56,15 @@ class Leaderboard():
             self.save()
         
     def draw_table(self, screen,className):
-        # Constants for the table
-        rows = 2
-        cols = 3
-        TABLE_WIDTH = screen.get_width() * 0.2
-        TABLE_HEIGHT = screen.get_height() * 0.2
-        CELL_WIDTH = TABLE_WIDTH // cols
-        CELL_HEIGHT = TABLE_HEIGHT // rows
-        table_x = screen.get_width() - TABLE_WIDTH
-        table_y = screen.get_height() - TABLE_HEIGHT
+        screen_width, screen_height = pygame.display.get_surface().get_size()
+        rows = 10
+        cols = 2
+        CELL_HEIGHT = screen_height / 10  # Cell height spans the full screen y-direction divided by the number of rows
+        CELL_WIDTH = 0.20 * screen_width / cols  # Each cell's width based on 20% of screen width divided by the number of columns
+
+        table_width = cols * CELL_WIDTH
+        table_x = screen_width - table_width  # Starting x-coordinate for the table, to place it on the right side
+        table_y = 0  # Starting at the top of the screen
         # Colors
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
@@ -85,13 +85,14 @@ class Leaderboard():
         self.load()
         current = class_to_text[className]
         thisScores = self.scores[current]
-        swidth, sheight = pygame.display.get_surface().get_size()
+        
+
         for row in range(rows):
             for col in range(cols):
-                padx = 0.1 * swidth
-                pady = 0.1 * sheight
-                x = table_x + col * CELL_WIDTH  - padx
-                y = table_y + row * CELL_HEIGHT - pady
+                padx = 0.10 * screen_width
+                pady = 0.10 * screen_height
+                x = table_x + col * CELL_WIDTH
+                y = table_y + row * CELL_HEIGHT
 
                 # Draw the table cell outline using lines
                 pygame.draw.line(screen, WHITE, (x, y), (x + CELL_WIDTH, y), 2)
@@ -101,17 +102,22 @@ class Leaderboard():
 
                 # Add text fields inside the cells
                 if row == 0:
-                    cell_text = f"{col+1}"
-                else:
-                    try:
-                        cell_text = f"{self.scores[current][col]:.3f}"
-                    except:
-                        cell_text = f"999.999"
+                    cell_text = f"Top scores"
+                else: 
+                    if col == 0:
+                        cell_text = f"{row}"
+                    else:
+                        try:
+                            cell_text = f"{self.scores[current][row-1]:.3f}"  # Modify this line to match your data source
+                        except:
+                            cell_text = f"999.999"
 
                 font = pygame.font.SysFont("Arial", 24)
                 text_surface = font.render(cell_text, True, WHITE)
                 text_rect = text_surface.get_rect(center=(x + CELL_WIDTH // 2, y + CELL_HEIGHT // 2))
                 screen.blit(text_surface, text_rect)
+        pygame.display.update()
+        return
 
     def greet(self,screen, className, best_time):
         pass

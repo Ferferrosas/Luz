@@ -240,7 +240,7 @@ def visualinterface():
         time.sleep(cueTime)  
         screen.fill(black)
 
-        prevTime = time.time()
+        prevTime = pygame.time.get_ticks()
         task_cue = 0
         if EXIT_ON_SERIAL:
             if currentClass == 1 and task_cue == 0:
@@ -350,7 +350,7 @@ def visualinterface():
 
 
             # Stopping criteria based on taskTime that is set in a0_configFile.py
-            if (time.time() - prevTime >= taskTime):
+            if (pygame.time.get_ticks() - prevTime >= taskTime):
                 class_to_send_id = {1: ',302', 2: ',402', 3: ',502', 4: ',602', 5: ',702', 6: ',802', 9: ',1102', 10: ',1202', 11: ',1302', 12: ',1402', 13: ',1502', 14: ',1602'}
                 
                 if currentClass in class_to_send_id:
@@ -391,7 +391,7 @@ def visualinterface():
                 # ANIMATION STOP  ################
                 pygame.display.update()
 
-                time.sleep(resultTime)
+                pygame.time.wait(resultTime * 3000)
                 SendID(',2001')
                 break
 
@@ -406,7 +406,7 @@ def visualinterface():
         pygame.display.update()
 
                 # <<<<<< REST >>>>>>
-        time.sleep(restTime + random.random())
+        pygame.time.wait( int ((restTime + random.random() ) * 1000) )
     end()
 
 def SendID(Trigg):

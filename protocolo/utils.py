@@ -171,7 +171,7 @@ def update_bar_height(context):
     taskTime = context['taskTime']
     Bigger_rectangle_Y = context['Bigger_rectangle_Y']
 
-    step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
+    step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (pygame.time.get_ticks() - prevTime) / taskTime
     y_bar = Bigger_rectangle_Y - step_size
     delta_height_2 = bar_width + step_size
 

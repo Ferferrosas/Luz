@@ -85,10 +85,11 @@ class Leaderboard():
         self.load()
         current = class_to_text[className]
         thisScores = self.scores[current]
+        swidth, sheight = pygame.display.get_surface().get_size()
         for row in range(rows):
             for col in range(cols):
-                padx = 100
-                pady = 100
+                padx = 0.1 * swidth
+                pady = 0.1 * sheight
                 x = table_x + col * CELL_WIDTH  - padx
                 y = table_y + row * CELL_HEIGHT - pady
 

@@ -8,7 +8,7 @@ from utils import *
 import pyautogui
 import math
 
-from LEADERBOARD import *
+from leaderboard import *
 from CONFIG import *
 from concurrent.futures import ThreadPoolExecutor
 
@@ -190,27 +190,8 @@ def visualinterface():
         arrowColor = class_to_color.get(currentClass)
 
         print('Class of current trial: ', currentClass)
-        
-        color_value = class_to_color.get(currentClass)
-        pygame.draw.rect(screen, color_value, (upArrowStartingX, upArrowStartingY, upArrowRectangleWidth, upArrowRectangleHeight), 0)
-        pygame.draw.polygon(screen, color_value, (point1UpArrow, point2UpArrow, point3UpArrow))
 
-        SendID(',2000')
-        if FIN == 1 and EXIT_ON_SERIAL == True:
-            sys.exit()
 
-        pygame.draw.rect(screen, bigRecColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height,Bigger_rectangle_height_new), 0)
-        pygame.draw.rect(screen, bigRecEdgeColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new),Bigthickness) 
-        pygame.draw.rect(screen, barColor, (initial_x_new, Down_rectangle_Y, bar_width, bar_width))
-        pygame.draw.rect(screen, barColor, (initial_x_new, Down_rectangle_Y, bar_width, bar_width))
-        pygame.draw.rect(screen, barColor, (initial_x_new, Down_rectangle_Y, bar_width, bar_width))
-
-        pygame.display.update()
-        # new code for cue timing
-
-        point1 = (centerOfScreen[0], Bigger_rectangle_Y)
-        point2 = (centerOfScreen[0] - 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)
-        point3 = (centerOfScreen[0] + 0.35 * bar_height, Bigger_rectangle_Y + bar_height / 2)\
         
         context = globals().copy()
         context.update(locals())
@@ -229,8 +210,6 @@ def visualinterface():
         }
         f_image_selection.get(currentClass)()
 
-        pygame.draw.polygon(screen, arrowColor, (point1, point2, point3))
-        pygame.display.update()
 
         # COMENTAMOS ESTO
         if currentClass == 1:
@@ -323,11 +302,30 @@ def visualinterface():
 
         print("Entering main loop")
         while True:
-            step_size = (0.5 * Bigger_rectangle_width - bar_width * 0.5) * (time.time() - prevTime) / taskTime
-            y_bar = Bigger_rectangle_Y - step_size
-            delta_height_2 = bar_width + step_size
+
+            context = globals().copy()
+            context.update(locals())
+
+            class_to_image = {
+                1:  IM_FLEXION_MET,
+                2:  IM_EXTENSION_MET,
+                3:  IM_FLEXION_PHA,
+                4:  IM_EXTENSION_PHA,
+                5:  IM_ADDUCTION_MET,
+                6:  IM_ABDUCTION_MET,
+                7:  IM_POINTING,
+                8:  IM_FINGER_3,
+                9:  IM_FINGER_2,
+                10: IM_MIDDLE_FINGER,
+                11: IM_RING_FINGER,
+                12: IM_PINKIE_FINGER
+            }
+
+            image = class_to_image[currentClass]
+            update_bar_height(context)
+            draw_task_image(image, context)            
             
-            # re-draw the interface
+            
             if fflag:
                 class_to_color_image = {
                     1:  (upGreen,     IM_FLEXION_MET),
@@ -350,34 +348,6 @@ def visualinterface():
                 draw_image_with_arrow_ff(color,image,context)
                 fflag = 0
 
-            pygame.draw.rect(screen, bigRecColor,     (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new), 0)  # third direction bar
-            pygame.draw.rect(screen, bigRecEdgeColor, (Bigger_rectangle_new_X, Bigger_rectangle_new_Y, Bigger_rectangle_height, Bigger_rectangle_height_new), Bigthickness)  # edges of the rectangle (third)
-            pygame.draw.rect(screen, barColor,        (initial_x_new, y_bar, bar_width, delta_height_2))  # draw up bar
-
-
-            context = globals().copy()
-            context.update(locals())
-
-            class_to_image = {
-                1:  IM_FLEXION_MET,
-                2:  IM_EXTENSION_MET,
-                3:  IM_FLEXION_PHA,
-                4:  IM_EXTENSION_PHA,
-                5:  IM_ADDUCTION_MET,
-                6:  IM_ABDUCTION_MET,
-                7:  IM_POINTING,
-                8:  IM_FINGER_3,
-                9:  IM_FINGER_2,
-                10: IM_MIDDLE_FINGER,
-                11: IM_RING_FINGER,
-                12: IM_PINKIE_FINGER
-            }
-
-            image = class_to_image[currentClass]
-            draw_task_image(image, context)
-
-            pygame.draw.polygon(screen, arrowColor, (point1, point2, point3))
-            pygame.display.update()
 
             # Stopping criteria based on taskTime that is set in a0_configFile.py
             if (time.time() - prevTime >= taskTime):

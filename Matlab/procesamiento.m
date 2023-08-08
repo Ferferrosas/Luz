@@ -2,22 +2,22 @@
 clc; close all; clear;
 %% Definición de banderas
 %Tiempo_contracion=9;
-%Banderas_Movimientos=[301,401,501,601,701,801,901,1001,1101,1201,1301,1401,1501,1601];
-Banderas_Movimientos=[601,501,301,401];
-Nombres_Movimientos=["Mano abierta","Puño","Flexión muñeca","Extensión muñeca"];
+Banderas_Movimientos=[301,401,501,601,701,801,901,1001,1101,1201,1301,1401,1501,1601];
+%Banderas_Movimientos=[601,501,301,401];
+%Nombres_Movimientos=["Mano abierta","Puño","Flexión muñeca","Extensión muñeca"];
 
-%Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abierta","Aducción muñeca"...
-% ,"Abducción muñeca","Señalar","Pinza doble","Pinza simple","Pinza medio",...
-%"Pinza anular","Pinza meñique"];
+Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abierta","Aducción muñeca"...
+ ,"Abducción muñeca","Señalar","Pinza doble","Pinza simple","Pinza medio",...
+"Pinza anular","Pinza meñique"];
 %% Extracción de datos
 %data = table2array(readtable('fer.csv'));
 data=readmatrix('fer.csv');
 fs = 190;
-N_canales=2;
+N_canales=3;
 N_senales=(N_canales*3);
 Registro_banderas=data(:,N_senales+1);
-N_movimientos=4;
-N_repeticiones=10;
+N_movimientos=12;
+N_repeticiones=20;
 N_pulsos=N_repeticiones*N_movimientos;
 Nombres_canales=["IR Canal 1", "R Canal 1","EMG Canal 1",  "IR Canal 2", "R Canal 2", "EMG Canal 2"];
 

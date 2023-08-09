@@ -2,26 +2,31 @@
 clc; close all; clear;
 %% Definición de banderas
 %Tiempo_contracion=9;
-%Banderas_Movimientos=[301,401,501,601,701,801,901,1001,1101,1201,1301,1401,1501,1601];
-Banderas_Movimientos=[601,501,301,401];
-Nombres_Movimientos=["Mano abierta","Puño","Flexión muñeca","Extensión muñeca"];
+Banderas_Movimientos=[301,401,501,601,701,801,1101,1201,1301,1401,1501,1601];
+%Banderas_Movimientos=[601,501,301,401];
+%Nombres_Movimientos=["Mano abierta","Puño","Flexión muñeca","Extensión muñeca"];
 
-%Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abierta","Aducción muñeca"...
-% ,"Abducción muñeca","Señalar","Pinza doble","Pinza simple","Pinza medio",...
-%"Pinza anular","Pinza meñique"];
+Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abierta","Aducción muñeca"...
+ ,"Abducción muñeca","Señalar","Pinza doble","Pinza simple","Pinza medio",...
+"Pinza anular","Pinza meñique"];
 %% Extracción de datos
 %data = table2array(readtable('fer.csv'));
-data=readmatrix('fer.csv');
+data=readmatrix('sujeto_3_hombre.csv');
 fs = 190;
-N_canales=2;
+N_canales=3;
 N_senales=(N_canales*3);
 Registro_banderas=data(:,N_senales+1);
-N_movimientos=4;
-N_repeticiones=10;
+N_movimientos=12;
+N_repeticiones=20;
 N_pulsos=N_repeticiones*N_movimientos;
-Nombres_canales=["IR Canal 1", "R Canal 1","EMG Canal 1",  "IR Canal 2", "R Canal 2", "EMG Canal 2"];
+Nombres_canales=["IR Canal 1", "R Canal 1","EMG Canal 1",  "IR Canal 2", "R Canal 2", "EMG Canal 2",  "IR Canal 3", "R Canal 3", "EMG Canal 3"];
 
 Datos= data;
+
+%% Ver orden y movimientos realizados
+Movs=Registro_banderas;
+Zeros=find(0==Registro_banderas);
+Movs(Zeros)=[];
 %% Graficar datos
 %Declarar vector de tiempo
 L_total=(length(data(:,1)))/190;
@@ -37,16 +42,24 @@ for i=1:1:N_senales
 end
 
 %% borrar valores atipicos
-for i=1:1:N_senales
-    promedio=mean(Datos(:,i));
-    borrarbajos=find(promedio*.10 >=Datos(:,i));
-    borraraltos=find(promedio*1.1 <=Datos(:,i));
-    borrar=[borrarbajos,borraraltos];
-    senal=Datos(:,i);
-    senal(borrar)=promedio;
-    Datos(:,i)=senal;
-end
+for x=1:1:1
+    for i=1:1:N_senales
+        promedio=mean(Datos(:,i));
+        borrarbajos=find(promedio*.10 >=Datos(:,i));
+        
+        senal=Datos(:,i);
+        senal(borrarbajos)=promedio;
+        Datos(:,i)=senal;
+    end
 
+    for i=1:1:N_senales
+        promedio=mean(Datos(:,i));
+        borraraltos=find(promedio*1.1 <=Datos(:,i));
+        senal=Datos(:,i);
+        senal(borraraltos)=promedio;
+        Datos(:,i)=senal;
+    end
+end
 figure()
 for i=1:1:N_senales
     subplot(N_canales,3,i)
@@ -62,19 +75,19 @@ subplot(3,1,1)
 hold on;
 plot(Tiempo,Datos(:,1));
 plot(Tiempo,Datos(:,4));
-%plot(Tiempo,Datos(:,7));
+plot(Tiempo,Datos(:,7));
 title(Nombres_canales(1))
 subplot(3,1,2)
 hold on;
 plot(Tiempo,Datos(:,2));
 plot(Tiempo,Datos(:,5));
-%plot(Tiempo,Datos(:,8));
+plot(Tiempo,Datos(:,8));
 title(Nombres_canales(2))
 subplot(3,1,3)
 hold on;
 plot(Tiempo,Datos(:,3));
 plot(Tiempo,Datos(:,6));
-%plot(Tiempo,Datos(:,9));
+plot(Tiempo,Datos(:,9));
 title(Nombres_canales(3))
 sgtitle("Sujeto 1 registro completo" )
 
@@ -130,6 +143,7 @@ subplot(3,1,1)
 hold on;
 plot(Tiempo,Datos_bajados(:,1));
 plot(Tiempo,Datos_bajados(:,4));
+plot(Tiempo,Datos_bajados(:,7));
 xlim([-inf, inf])
 ylim([-1000, 1000])
 for i=1:1:N_pulsos
@@ -145,6 +159,7 @@ subplot(3,1,2)
 hold on;
 plot(Tiempo,Datos_bajados(:,2));
 plot(Tiempo,Datos_bajados(:,5));
+plot(Tiempo,Datos_bajados(:,8));
 xlim([-inf, inf])
 ylim([-2000, 2000])
 for i=1:1:N_pulsos
@@ -159,6 +174,7 @@ subplot(3,1,3)
 hold on;
 plot(Tiempo,Datos_bajados(:,3));
 plot(Tiempo,Datos_bajados(:,6));
+plot(Tiempo,Datos_bajados(:,9));
 for i=1:1:N_pulsos
     if(rem(i-1, N_repeticiones)~=0)
         line([Tiempo(x(i)) Tiempo(x(i))], ylim, 'Color', 'g', 'LineStyle', '--')
@@ -171,11 +187,6 @@ ylim([-inf, inf])
 title("emg")
 sgtitle("Sujeto 1 registro completo menos promedio" )
 
-%% Ver orden y movimientos realizados
-Movs=Registro_banderas;
-Zeros=find(0==Registro_banderas);
-Movs(Zeros)=[];
-disp("Mano abierta , Puño , Flexión muñeca , Extensión muñeca");
 
 %% Segmentar movimientos
 

@@ -11,7 +11,7 @@ Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abier
 "Pinza anular","Pinza meñique"];
 %% Extracción de datos
 %data = table2array(readtable('fer.csv'));
-data=readmatrix('sujeto_3_hombre.csv');
+data=readmatrix('sujeto_1_hombre.csv');
 fs = 190;
 N_canales=3;
 N_senales=(N_canales*3);
@@ -41,15 +41,45 @@ for i=1:1:N_senales
     title(Nombres_canales(i))
 end
 
+%% Filtro EMG
+
+%Fourier
+emg_fft = fft(Datos(:,2));
+N = length(Datos(:,6)); % Longitud de la señal
+frequencies = (0:N-1) * (fs/N);
+
+amplitude_spectrum = abs(emg_fft);
+figure()
+plot(frequencies, amplitude_spectrum);
+xlabel('Frecuencia (Hz)');
+ylabel('Amplitud');
+title('Espectro de Amplitud');
+
+ for i=2:1:2%3:3:N_senales
+     senal=Datos(:,i); 
+     Datos(:,i)= bandpassfilt(93,94,190,1,senal);
+
+    figure ();
+    subplot(2,1,1);
+    plot(Tiempo, senal);
+    title('Señal de EMG Original');
+    xlabel('Tiempo (ms)');
+    ylabel('Amplitud');
+    subplot(2,1,2);
+    plot(Tiempo, Datos(:,i));
+    title('Señal de EMG Filtrada');
+    xlabel('Tiempo (ms)');
+    ylabel('Amplitud');
+ end
 %% borrar valores atipicos
 for x=1:1:2
-    for i=1:1:N_senales
+    for i=[1, 2, 4, 5, 7, 8]
         promedio=mean(Datos(:,i));
         borrarbajos=find(promedio*.10 >=Datos(:,i));
         borraraltos=find(promedio*1.1 <=Datos(:,i));
         senal=Datos(:,i);
-        senal(borrarbajos)=promedio;
-        senal(borraraltos)=promedio;
+        senal(borrarbajos)=senal(borrarbajos-1);
+        senal(borraraltos)=senal(borraraltos-1);
         Datos(:,i)=senal;
     end
 end
@@ -84,71 +114,34 @@ plot(Tiempo,Datos(:,9));
 title(Nombres_canales(3))
 sgtitle("Sujeto 1 registro completo" )
 
-%restar la media para ver bien las señales
-Datos_bajados=zeros(length(Datos(:,1)),N_senales);
-mean_data = Datos(1,:);
-for i=1:1:N_senales
-    Datos_bajados(:,i) = Datos(:,i) - mean_data(i);
-end
-Datos=Datos_bajados;
-
-figure()
-subplot(3,1,1)
-hold on;
-plot(Tiempo,Datos(:,1));
-plot(Tiempo,Datos(:,4));
-plot(Tiempo,Datos(:,7));
-title(Nombres_canales(1))
-subplot(3,1,2)
-hold on;
-plot(Tiempo,Datos(:,2));
-plot(Tiempo,Datos(:,5));
-plot(Tiempo,Datos(:,8));
-title(Nombres_canales(2))
-subplot(3,1,3)
-hold on;
-plot(Tiempo,Datos(:,3));
-plot(Tiempo,Datos(:,6));
-plot(Tiempo,Datos(:,9));
-title(Nombres_canales(3))
-sgtitle("Sujeto 1 registro completo" )
-%% Fourier
-emg_fft = fft(Datos(:,6));
-N = length(Datos(:,6)); % Longitud de la señal
-frequencies = (0:N-1) * (fs/N);
-
-amplitude_spectrum = abs(emg_fft);
-figure()
-plot(frequencies, amplitude_spectrum);
-xlabel('Frecuencia (Hz)');
-ylabel('Amplitud');
-title('Espectro de Amplitud');
-%% Filtro EMG
-
- for i=3:3:N_senales
-     senal=Datos(:,i); %cambiar este por 3 y 6
-     Datos(:,i)= bandpassfilt(93,94,190,8,senal);
-% 
-%     figure ();
-%     subplot(2,1,1);
-%     plot(Tiempo, senal);
-%     title('Señal de EMG Original');
-%     xlabel('Tiempo (ms)');
-%     ylabel('Amplitud');
-%     subplot(2,1,2);
-%     plot(Tiempo, Datos(:,i));
-%     title('Señal de EMG Filtrada');
-%     xlabel('Tiempo (ms)');
-%     ylabel('Amplitud');
- end
-
 %% restar la media para ver bien las señales
 Datos_bajados=zeros(length(Datos(:,1)),N_senales);
 mean_data = Datos(1,:);
 for i=1:1:N_senales
     Datos_bajados(:,i) = Datos(:,i) - mean_data(i);
 end
-%Datos_bajados= Datos;
+
+figure()
+subplot(3,1,1)
+hold on;
+plot(Tiempo,Datos_bajados(:,1));
+plot(Tiempo,Datos_bajados(:,4));
+plot(Tiempo,Datos_bajados(:,7));
+title(Nombres_canales(1))
+subplot(3,1,2)
+hold on;
+plot(Tiempo,Datos_bajados(:,2));
+plot(Tiempo,Datos_bajados(:,5));
+plot(Tiempo,Datos_bajados(:,8));
+title(Nombres_canales(2))
+subplot(3,1,3)
+hold on;
+plot(Tiempo,Datos_bajados(:,3));
+plot(Tiempo,Datos_bajados(:,6));
+plot(Tiempo,Datos_bajados(:,9));
+title(Nombres_canales(3))
+sgtitle("Sujeto 1 registro completo" )
+
 %% Marcar movimientos
 Posiciones_contracciones=zeros(N_repeticiones,N_movimientos);
 %buscar los incios de las banderas

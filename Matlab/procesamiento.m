@@ -84,6 +84,34 @@ plot(Tiempo,Datos(:,9));
 title(Nombres_canales(3))
 sgtitle("Sujeto 1 registro completo" )
 
+%restar la media para ver bien las señales
+Datos_bajados=zeros(length(Datos(:,1)),N_senales);
+mean_data = Datos(1,:);
+for i=1:1:N_senales
+    Datos_bajados(:,i) = Datos(:,i) - mean_data(i);
+end
+Datos=Datos_bajados;
+
+figure()
+subplot(3,1,1)
+hold on;
+plot(Tiempo,Datos(:,1));
+plot(Tiempo,Datos(:,4));
+plot(Tiempo,Datos(:,7));
+title(Nombres_canales(1))
+subplot(3,1,2)
+hold on;
+plot(Tiempo,Datos(:,2));
+plot(Tiempo,Datos(:,5));
+plot(Tiempo,Datos(:,8));
+title(Nombres_canales(2))
+subplot(3,1,3)
+hold on;
+plot(Tiempo,Datos(:,3));
+plot(Tiempo,Datos(:,6));
+plot(Tiempo,Datos(:,9));
+title(Nombres_canales(3))
+sgtitle("Sujeto 1 registro completo" )
 %% Fourier
 emg_fft = fft(Datos(:,6));
 N = length(Datos(:,6)); % Longitud de la señal
@@ -97,22 +125,22 @@ ylabel('Amplitud');
 title('Espectro de Amplitud');
 %% Filtro EMG
 
-for i=3:3:N_senales
-    senal=Datos(:,i); %cambiar este por 3 y 6
-    Datos(:,i)= bandpassfilt(93,94,190,8,senal);
-    
-    figure ();
-    subplot(2,1,1);
-    plot(Tiempo, senal);
-    title('Señal de EMG Original');
-    xlabel('Tiempo (ms)');
-    ylabel('Amplitud');
-    subplot(2,1,2);
-    plot(Tiempo, Datos(:,i));
-    title('Señal de EMG Filtrada');
-    xlabel('Tiempo (ms)');
-    ylabel('Amplitud');
-end
+% for i=3:3:N_senales
+%     senal=Datos(:,i); %cambiar este por 3 y 6
+%     Datos(:,i)= bandpassfilt(93,94,190,8,senal);
+% 
+%     figure ();
+%     subplot(2,1,1);
+%     plot(Tiempo, senal);
+%     title('Señal de EMG Original');
+%     xlabel('Tiempo (ms)');
+%     ylabel('Amplitud');
+%     subplot(2,1,2);
+%     plot(Tiempo, Datos(:,i));
+%     title('Señal de EMG Filtrada');
+%     xlabel('Tiempo (ms)');
+%     ylabel('Amplitud');
+% end
 
 %% restar la media para ver bien las señales
 Datos_bajados=zeros(length(Datos(:,1)),N_senales);

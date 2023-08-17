@@ -43,7 +43,7 @@ for i=1:1:N_senales
     borraraltos=find(promedio*1.1 <=Datos(:,i));
     borrar=[borrarbajos,borraraltos];
     senal=Datos(:,i);
-    senal(borrar)=promedio;
+    senal(borrar)=senal(borrar-1);
     Datos(:,i)=senal;
 end
 

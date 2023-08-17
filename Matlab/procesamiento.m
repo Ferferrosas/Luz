@@ -11,7 +11,7 @@ Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abier
 "Pinza anular","Pinza meñique"];
 %% Extracción de datos
 %data = table2array(readtable('fer.csv'));
-data=readmatrix('sujeto_3_hombre.csv');
+data=readmatrix('sujeto_3.csv');
 fs = 190;
 N_canales=3;
 N_senales=(N_canales*3);

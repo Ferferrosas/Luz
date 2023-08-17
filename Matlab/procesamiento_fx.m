@@ -1,7 +1,7 @@
 
 limpiar
 
-Nombre_archivo='sujeto_2_hombre.csv';
+Nombre_archivo='sujeto_3.csv';
 fs=190;
 N_canales=3;
 N_movimientos=12;

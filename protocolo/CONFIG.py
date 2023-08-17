@@ -16,10 +16,10 @@ resultTime=1
 restTime= 2
 #fixationTime = 1
 
-n = 1
+n = 0
 
-n_flexion_met = n
-n_extension_met = 10
+n_flexion_met = 1
+n_extension_met = 0
 n_flexion_pha = n
 n_extension_pha = n
 n_adduction_met = n

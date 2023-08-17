@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from numpy.fft import fft, ifft
 from scipy.signal import argrelextrema
 import serial
-import random
 from numba import jit , guvectorize
 
 arduino_port = "COM4"
@@ -18,9 +17,7 @@ x = np.linspace(0, 20, y.shape[0])
 spacing = 1000
 
 
-
-
-#ser = serial.Serial(arduino_port, baud)
+ser = serial.Serial(arduino_port, baud)
 ROLLING_WINDOW = 8200
 SPACING = 1000
 BATCHED_DATA = np.zeros(8200)
@@ -55,6 +52,8 @@ while True:
     if idx == 8200:
         idx = 0
     
+    arduino_read = ser.readline()
+    print(arduino_read)
     read_value = df[0].values[time]
     BATCHED_DATA[idx] = read_value
     

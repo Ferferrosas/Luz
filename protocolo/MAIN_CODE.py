@@ -23,10 +23,10 @@ VAR  = 1
 FIN  = 1
 TEMP = 0
 
-EXIT_ON_SERIAL = False
+EXIT_ON_SERIAL = True
 
 arduino_port = "COM4"
-baud         = 230400
+baud         = 115200
 
 pygame.init()
 screen = pyautogui.size()
@@ -449,7 +449,7 @@ def SerialComunication():
 
     # add the data to the file
     file = open(fileName, "a")  # append the data to the file
-    file.write(data + "\\n")  # write data with a newline
+    file.write(data + "\n")  # write data with a newline
 
     file.close()
 
@@ -485,6 +485,6 @@ if __name__ == '__main__':
     if EXIT_ON_SERIAL == True:
         executor = ThreadPoolExecutor(max_workers=3)
         executor.submit(SerialComunication)
-        executor.submit(visualinterface)
+        visualinterface()
     else:
         visualinterface()

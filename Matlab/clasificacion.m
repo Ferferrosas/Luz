@@ -1,4 +1,4 @@
-%% solo para graficar los datos
+
 clc; close all; clear;
 %% Definición de banderas
 %Tiempo_contracion=9;
@@ -11,7 +11,7 @@ Nombres_Movimientos=["Flexión muñeca","Extensión muñeca","Puño","Mano abier
 "Pinza anular","Pinza meñique"];
 %% Extracción de datos
 %data = table2array(readtable('fer.csv'));
-data=readmatrix('sujeto_2_hombre.csv');
+data=readmatrix('sujeto_3_hombre.csv');
 fs = 190;
 N_canales=3;
 N_senales=(N_canales*3);
@@ -19,7 +19,8 @@ Registro_banderas=data(:,N_senales+1);
 N_movimientos=12;
 N_repeticiones=20;
 N_pulsos=N_repeticiones*N_movimientos;
-Nombres_canales=["IR Canal 1", "R Canal 1","EMG Canal 1",  "IR Canal 2", "R Canal 2", "EMG Canal 2",  "IR Canal 3", "R Canal 3", "EMG Canal 3"];
+musculos=["flexor de los dedos", "extensor de los dedos","braquiradial"];
+Nombres_canales=["IR flexor", "R flexor","EMG flexor",  "IR extensor", "R extensor", "EMG extensor",  "IR braquiradial", "R braquiradial", "EMG braquiradial"];
 
 Datos= data;
 
@@ -29,8 +30,8 @@ Zeros=find(0==Registro_banderas);
 Movs(Zeros)=[];
 %% Graficar datos
 %Declarar vector de tiempo
-L_total=(length(data(:,1)))/190;
-Tiempo = (0:1/190:L_total-(1/190))';
+L_total=(length(data(:,1)))/fs;
+Tiempo = (0:1/fs:L_total-(1/fs))';
 
 
 figure()
@@ -57,7 +58,7 @@ end
 
  for i=3:3:N_senales
      senal=Datos(:,i); 
-     Datos(:,i)= bandpassfilt(93,94,190,8,senal);
+     Datos(:,i)= bandpassfilt(93,94,fs,8,senal);
 % 
 %     figure ();
 %     subplot(2,1,1);
@@ -72,7 +73,7 @@ end
 %     ylabel('Amplitud');
  end
 %% borrar valores atipicos
-for x=1:1:2
+for x=1:1:1
     for i=[1, 2, 4, 5, 7, 8]
         promedio=mean(Datos(:,i));
         borrarbajos=find(promedio*.10 >=Datos(:,i));
@@ -204,15 +205,16 @@ sgtitle("Sujeto 1 registro completo menos promedio" )
 
 %% Segmentar movimientos
 
-Ir=[]; R=[]; Emg=[];Ir2=[]; R2=[]; Emg2=[];
+Ir=[]; R=[]; Emg=[];Ir2=[]; R2=[]; Emg2=[];inicio=190;fin=1520;
 for m=1:1:N_movimientos %movimientos
     for rep=1:1:N_repeticiones %repetición
-        Ir=[Ir;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,1)'];
-        R=[R;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,2)'];
-        Emg=[Emg;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,3)'];
-        Ir2=[Ir2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,4)'];
-        R2=[R2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,5)'];
-        Emg2=[Emg2;Datos_bajados(Posiciones_contracciones(rep,m)-190:Posiciones_contracciones(rep,m)+1900,6)'];
+        Ir=[Ir;Datos_bajados(Posiciones_contracciones(rep,m)-inicio:Posiciones_contracciones(rep,m)+fin,1)'];
+        R=[R;Datos_bajados(Posiciones_contracciones(rep,m)-inicio:Posiciones_contracciones(rep,m)+fin,2)'];
+        Emg=[Emg;Datos_bajados(Posiciones_contracciones(rep,m)-inicio:Posiciones_contracciones(rep,m)+fin,3)'];
+        Ir2=[Ir2;Datos_bajados(Posiciones_contracciones(rep,m)-inicio:Posiciones_contracciones(rep,m)+fin,4)'];
+        R2=[R2;Datos_bajados(Posiciones_contracciones(rep,m)-inicio:Posiciones_contracciones(rep,m)+fin,5)'];
+        Emg2=[Emg2;Datos_bajados(Posiciones_contracciones(rep,m)-inicio:Posiciones_contracciones(rep,m)+fin,6)'];
+        
     end
 end
 
@@ -245,10 +247,10 @@ end
 
 %% Graficas
 
-L_pulso=(length(promedios_Ir(1,:)))/190;
-Tiempo = (0:1/190:L_pulso-(1/190))';
+L_pulso=(length(promedios_Ir(1,:)))/inicio;
+Tiempo = (0:1/inicio:L_pulso-(1/inicio))';
 
-colores=["g" "b" "y" "c" "k"  "r" "m" "w"];
+colores=["g" "b" "y" "c" "k"  "r" "m" "w" "g" "b" "y" "c" "k"  "r" "m" "w" ];
 i=0;
 figure()
 for mov=1:1:N_movimientos

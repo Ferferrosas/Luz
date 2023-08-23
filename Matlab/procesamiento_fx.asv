@@ -27,14 +27,17 @@ N_repeticiones=10;
     % ylabel('Amplitud');
  end
 
-for rep=1:1:1
-    for i=[1,2,4,5]
+for rep=1:1:2
+    for i=[1,2]
         senal_original = Datos(:,i);
 
-        ventana_mediana = 5; 
-        senal_filtrada = medfilt1(senal_original, ventana_mediana);
-        Datos(:,i)=senal_filtrada;
+        % Parámetros del filtro mediano
+        ventana_mediana = 50; % Tamaño de la ventana para el filtro mediano
 
+        % Aplica el filtro mediano a la señal
+        senal_filtrada = medfilt1(senal_original, ventana_mediana);
+
+        % Grafica las señales original y filtrada
         figure()
         subplot(2, 1, 1);
         plot(Tiempo, senal_original);
@@ -44,11 +47,3 @@ for rep=1:1:1
         title('Señal Filtrada (Filtro Mediano)');
     end
 end 
-
-figure()
-    for i=1:1:N_senales
-        subplot(N_canales,3,i)
-        plot(Tiempo,Datos(:,i));
-        sgtitle(Nombre_archivo+" registro completo" )
-        title(Nombres_canales(i))
-    end

@@ -14,12 +14,6 @@ Nombres_canales=["IR flexor", "R flexor","EMG flexor",  "IR extensor", "R extens
 [Tiempo]=Vector_tiempo(Datos,fs);
 
 %Graficar datos
-figure()
-for i=1:1:N_senales
-    subplot(N_canales,3,i)
-    plot(Tiempo,Datos(:,i));
-    sgtitle(Nombre_archivo + " registro completo" )
-    title(Nombres_canales(i))
-end
+grafica(Datos,Nombres_canales,Nombre_archivo,Tiempo,N_senales,N_canales)
 
 end
